@@ -7,7 +7,8 @@ Application::Application()
 {
 	initVariables();
 	initWindow();
-	initTopBar();
+	initGUI();
+	//initTopBar();
 }
 
 Application::~Application()
@@ -34,6 +35,9 @@ void Application::pollEvents()
 				window->close();
 			break;
 		}
+
+		guiManager.updateAll();
+
 	}
 
 }
@@ -47,13 +51,10 @@ void Application::update()
 void Application::render()
 {
 	window->clear(sf::Color::Cyan);
-
-	window->draw(topBar);
+	guiManager.renderAll(*window);
 
 	window->display();
 }
-
-
 
 //private
 
@@ -69,9 +70,18 @@ void Application::initWindow()
 	window = new sf::RenderWindow(videoMode, title, sf::Style::Fullscreen);
 }
 
-void Application::initTopBar()
+void Application::initGUI()
 {
-	topBar.setSize(sf::Vector2f(static_cast<float>(videoMode.width), 200.0f)); // Set size of top bar
-	topBar.setFillColor(sf::Color::Blue); // Set color of top bar
-	topBar.setPosition(0.0f, 0.0f); // Set position of top bar
+	//adding a top bar
+	auto topBar = std::make_unique<Bar>(0.0f, 0.0f, videoMode.width, videoMode.height / 5.0f, sf::Color::Red, true);//need to fix 
+	guiManager.addElement(std::move(topBar));
+
 }
+
+
+//void Application::initTopBar()
+//{
+//	topBar.setSize(sf::Vector2f(static_cast<float>(videoMode.width), 200.0f)); // Set size of top bar
+//	topBar.setFillColor(sf::Color::Blue); // Set color of top bar
+//	topBar.setPosition(0.0f, 0.0f); // Set position of top bar
+//}

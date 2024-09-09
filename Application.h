@@ -3,6 +3,8 @@
 #include <SFML/Window.hpp>
 #include <string>
 
+#include "GUIManager.h"
+#include "Bar.h"
 
 class Application
 {
@@ -24,12 +26,12 @@ private:
 
 	const std::string title;
 
+	GUIManager guiManager;
+
 	//design 
 
-	sf::RectangleShape topBar;
 
-	void initTopBar();
-
+	void initGUI();
 	void initVariables();
 	void initWindow();
 };

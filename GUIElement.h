@@ -5,7 +5,7 @@
 class GUIElement
 {
 public:
-	GUIElement(sf::RectangleShape shape, bool isVisible);
+	GUIElement(bool isVisible);
 	virtual ~GUIElement() = default;
 
 	virtual void render(sf::RenderTarget& target) = 0;
@@ -13,12 +13,12 @@ public:
 
 	virtual bool isHovered(const sf::Vector2f& mousePos) = 0;
 
+	bool isVisible() const;
 
 
 
 protected:
-	sf::RectangleShape shape;
-	bool isVisible;
+	bool visible;
 
 };
 

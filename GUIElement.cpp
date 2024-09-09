@@ -1,5 +1,10 @@
 #include "GUIElement.h"
 
-GUIElement::GUIElement(sf::RectangleShape shape, bool isVisible) :shape(shape), isVisible(isVisible)
+GUIElement::GUIElement(bool visible) : visible(visible)
 {
+}
+
+bool GUIElement::isVisible() const
+{
+	return visible;
 }
