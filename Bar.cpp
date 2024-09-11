@@ -1,8 +1,8 @@
 #include "Bar.h"
 
-Bar::Bar(float pozX, float pozY, float width, float height, sf::Color color, bool isVisible = true) : GUIElement(isVisible), boundingBox({ width,height })
+Bar::Bar(float pozX, float pozY, float width, float height, sf::Color color, bool isVisible) : GUIElement(isVisible), boundingBox({ width,height })
 {
-	boundingBox.setOrigin({ pozX,pozY });
+	boundingBox.setPosition({ pozX,pozY });
 	boundingBox.setFillColor(color);
 
 }
@@ -12,7 +12,7 @@ void Bar::render(sf::RenderTarget& target)
 	target.draw(boundingBox);
 }
 
-void Bar::update()
+void Bar::update(sf::Event& ev)
 {
 }
 

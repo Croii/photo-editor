@@ -9,7 +9,7 @@ public:
 	virtual ~GUIElement() = default;
 
 	virtual void render(sf::RenderTarget& target) = 0;
-	virtual void update() = 0;
+	virtual void update(sf::Event& ev) = 0;
 
 	virtual bool isHovered(const sf::Vector2f& mousePos) = 0;
 

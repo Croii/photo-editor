@@ -2,12 +2,12 @@
 
 void GUIManager::addElement(std::unique_ptr<GUIElement> element)
 {
-	guiElements.push_back(std::move(element));
+	guiElements[priority++] = std::move(element);
 }
 
 void GUIManager::renderAll(sf::RenderWindow& window)
 {
-	for (auto& element : guiElements)
+	for (auto& [_, element] : guiElements)
 	{
 		if (element->isVisible())
 		{
@@ -16,10 +16,10 @@ void GUIManager::renderAll(sf::RenderWindow& window)
 	}
 }
 
-void GUIManager::updateAll()
+void GUIManager::updateAll(sf::Event& ev)
 {
-	for (auto& element : guiElements)
+	for (auto& [_, element] : guiElements)
 	{
-		element->update();
+		element->update(ev);
 	}
 }

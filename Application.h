@@ -1,10 +1,13 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
-#include <string>
+#include <string>	
+#include <iostream>
+
 
 #include "GUIManager.h"
 #include "Bar.h"
+#include "Button.h"
 
 class Application
 {
@@ -28,9 +31,8 @@ private:
 
 	GUIManager guiManager;
 
+
 	//design 
-
-
 	void initGUI();
 	void initVariables();
 	void initWindow();

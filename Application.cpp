@@ -2,13 +2,13 @@
 
 //public
 
+
 Application::Application()
 	: title("Photo Editor")
 {
 	initVariables();
 	initWindow();
 	initGUI();
-	//initTopBar();
 }
 
 Application::~Application()
@@ -34,10 +34,14 @@ void Application::pollEvents()
 			if (ev.key.code == sf::Keyboard::Escape)
 				window->close();
 			break;
+			//		case sf::Event::MouseMoved:
+				//		std::cout << sf::Mouse::getPosition().x << " " << sf::Mouse::getPosition().y << std::endl;
 		}
 
-		guiManager.updateAll();
+		guiManager.updateAll(ev);
 
+
+		window->setFramerateLimit(60);
 	}
 
 }
@@ -73,8 +77,30 @@ void Application::initWindow()
 void Application::initGUI()
 {
 	//adding a top bar
-	auto topBar = std::make_unique<Bar>(0.0f, 0.0f, videoMode.width, videoMode.height / 5.0f, sf::Color::Red, true);//need to fix 
+	auto topBar = std::make_unique<Bar>(0.0f, 0.0f, videoMode.width, videoMode.height / 5.0f, sf::Color::Red);//need to fix 
 	guiManager.addElement(std::move(topBar));
+
+	//adding a buttons
+
+	/*auto button2 = std::make_unique<Button>(50, 50, 100.0f, 100.0f, sf::Color::Black, true);
+	guiManager.addElement(std::move(button2));
+
+	auto button3 = std::make_unique<Button>(250, 50, 100.0f, 100.0f, sf::Color::Black);
+	guiManager.addElement(std::move(button3));
+
+	auto button4 = std::make_unique<Button>(450, 50, 100.0f, 100.0f, sf::Color::Black);
+	guiManager.addElement(std::move(button4));
+
+	auto button5 = std::make_unique<Button>(650, 50, 100.0f, 100.0f, sf::Color::Black);
+	guiManager.addElement(std::move(button5));*/
+	//basic 
+	const int buttons_count = 9;
+	for (int i = 0; i < buttons_count; i++)
+	{
+		auto button = std::make_unique<Button>(50 + 200 * i, 50, 100.0f, 100.0f, sf::Color::Black, [i]() {std::cout << i << std::endl; }, true);
+		guiManager.addElement(std::move(button));
+	}
+
 
 }
 
