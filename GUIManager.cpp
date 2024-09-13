@@ -1,6 +1,6 @@
 #include "GUIManager.h"
 
-void GUIManager::addElement(std::unique_ptr<GUIElement> element)
+void GUIManager::addElement(std::unique_ptr<GUIElement>&& element)
 {
 	guiElements[priority++] = std::move(element);
 }

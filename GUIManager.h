@@ -9,7 +9,7 @@ public:
 	GUIManager() = default;
 	~GUIManager() = default;
 
-	void addElement(std::unique_ptr<GUIElement> element);
+	void addElement(std::unique_ptr<GUIElement>&& element);
 	void renderAll(sf::RenderWindow& window);
 	void updateAll(sf::Event& event);
 

@@ -3,11 +3,17 @@
 #include <SFML/Window.hpp>
 #include <string>	
 #include <iostream>
+#include <filesystem>
 
+#include <windows.h>
+#include <commdlg.h>
 
 #include "GUIManager.h"
 #include "Bar.h"
 #include "Button.h"
+#include "ImageManager.h"
+#include "Constants.h"
+
 
 class Application
 {
@@ -21,8 +27,10 @@ public:
 	void update();
 	void render();
 
+
 private:
 
+	std::string openFileDialog();
 	sf::RenderWindow* window;
 	sf::VideoMode videoMode;
 	sf::Event ev;
@@ -30,7 +38,7 @@ private:
 	const std::string title;
 
 	GUIManager guiManager;
-
+	ImageManager imageManager;
 
 	//design 
 	void initGUI();
