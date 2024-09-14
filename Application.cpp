@@ -41,7 +41,7 @@ void Application::pollEvents()
 		}
 
 		guiManager.updateAll(ev);
-
+		imageManager.update(ev);
 		window->setFramerateLimit(60);
 	}
 
