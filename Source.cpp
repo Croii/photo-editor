@@ -5,6 +5,7 @@
 
 int main()
 {
+
 	Application engine;
 	while (engine.running())
 	{
@@ -12,6 +13,5 @@ int main()
 		engine.update();
 		engine.render();
 	}
-
 	return 0;
 }

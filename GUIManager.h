@@ -2,6 +2,7 @@
 
 #include "GUIElement.h"
 #include <unordered_map>
+#include <memory>
 
 class GUIManager
 {
@@ -15,7 +16,12 @@ public:
 
 
 
+	static void initializeAssests();
+	static std::shared_ptr<sf::Texture> getAsset(const std::string& name) noexcept;
+
 private:
+	static std::unordered_map<std::string, std::shared_ptr<sf::Texture>> assets;
+	static std::vector<std::string > assetName;
 
 	int priority = 0;
 	using GUIElement_ptr = std::unique_ptr<GUIElement>;

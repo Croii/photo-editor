@@ -1,5 +1,8 @@
 #include "GUIManager.h"
 
+std::vector<std::string > GUIManager::assetName = { "saveFile", "selectFile" };
+std::unordered_map<std::string, std::shared_ptr<sf::Texture>> GUIManager::assets;
+
 void GUIManager::addElement(std::unique_ptr<GUIElement>&& element)
 {
 	guiElements[priority++] = std::move(element);
@@ -22,4 +25,23 @@ void GUIManager::updateAll(sf::Event& ev)
 	{
 		element->update(ev);
 	}
+}
+
+
+void GUIManager::initializeAssests()
+{
+	for (auto& name : assetName)
+	{
+		auto texture = std::make_shared<sf::Texture>();
+		if (texture->loadFromFile("Assets\\" + name + ".png")) {
+			//here is the good texture
+			assets.insert({ name ,texture });
+		}
+	}
+
+}
+
+std::shared_ptr<sf::Texture> GUIManager::getAsset(const std::string& name) noexcept
+{
+	return assets[name];
 }

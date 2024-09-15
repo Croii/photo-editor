@@ -4,9 +4,10 @@
 
 
 Application::Application()
-	: title("Photo Editor"), imageManager(openFileDialog())
+	: title("Photo Editor")
 {
 
+	GUIManager::initializeAssests();
 	initVariables();
 	initWindow();
 	initGUI();
@@ -60,41 +61,6 @@ void Application::render()
 	imageManager.displayImage(*window);
 	window->display();
 }
-
-std::string Application::openFileDialog()
-{
-
-	OPENFILENAMEA ofn;       // Common dialog box structure (A for ANSI version)
-	char szFile[260];        // Buffer for file name (char for narrow chars)
-	HWND hwnd = NULL;        // Owner window (can be NULL)
-
-	// Initialize OPENFILENAME
-	ZeroMemory(&ofn, sizeof(ofn));
-	ofn.lStructSize = sizeof(ofn);
-	ofn.hwndOwner = hwnd;
-	ofn.lpstrFile = szFile;
-	ofn.lpstrFile[0] = '\0';  // Initialize buffer to empty string
-	ofn.nMaxFile = sizeof(szFile);
-	ofn.lpstrFilter = "Image Files\0*.jpg;*.jpeg;*.png;*.bmp;*.gif;*.tiff\0";  // Narrow string
-	ofn.nFilterIndex = 1;
-	ofn.lpstrFileTitle = NULL;
-	ofn.nMaxFileTitle = 0;
-	ofn.lpstrInitialDir = NULL;
-	ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
-
-	// Display the Open dialog box
-	if (GetOpenFileNameA(&ofn) == TRUE) {
-		// Return the narrow string file path as std::string
-		return std::string(ofn.lpstrFile);
-	}
-	else {
-		// Handle cancellation or error
-		return std::string();
-	}
-
-}
-
-
 //private
 
 
@@ -112,13 +78,20 @@ void Application::initWindow()
 void Application::initGUI()
 {
 	//adding a top bar
-	auto topBar = std::make_unique<Bar>(0.0f, 0.0f, constants::NAVIGATION_BAR_WIDTH, constants::NAVIGATION_BAR_HEIGHT, sf::Color::Red);//need to fix 
+	auto topBar = std::make_unique<Bar>(0.0f, 0.0f, constants::NAVIGATION_BAR_WIDTH, constants::NAVIGATION_BAR_HEIGHT, sf::Color(28, 91, 161));//need to fix 
 	guiManager.addElement(std::move(topBar));
 
 	//adding a buttons
 
-	auto openFileButton = std::make_unique<Button>(50, 50, 100.0f, 100.0f, sf::Color::Black, []() {std::cout << "Open file" << std::endl; }, true);
+	auto openFileButton = std::make_unique<Button>(50.0f, 50.0f, 100.0f, 100.0f, "selectFile", [this]() {
+		this->imageManager.loadImage(openFile());
+		std::cout << "Open file" << std::endl; }, true);
 	guiManager.addElement(std::move(openFileButton));
+
+	auto saveFileButton = std::make_unique<Button>(200.0f, 50.0f, 100.0f, 100.0f, "saveFile", [this]() {
+		this->imageManager.saveImage();
+		std::cout << "Save file" << std::endl; }, true);
+	guiManager.addElement(std::move(saveFileButton));
 
 
 }

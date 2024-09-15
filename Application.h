@@ -5,8 +5,7 @@
 #include <iostream>
 #include <filesystem>
 
-#include <windows.h>
-#include <commdlg.h>
+
 
 #include "GUIManager.h"
 #include "Bar.h"
@@ -30,7 +29,6 @@ public:
 
 private:
 
-	std::string openFileDialog();
 	sf::RenderWindow* window;
 	sf::VideoMode videoMode;
 	sf::Event ev;
