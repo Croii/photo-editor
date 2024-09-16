@@ -1,10 +1,10 @@
 #pragma once
-#include "SFML/Graphics.hpp"
 #include "Constants.h"
+#include "SFML/Graphics.hpp"
 #include "Utility.h"
 
-#include <string>
 #include <iostream>
+#include <string>
 
 
 class ImageManager

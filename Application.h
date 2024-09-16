@@ -1,17 +1,17 @@
 #pragma once
+#include <filesystem>
+#include <iostream>
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include <string>	
-#include <iostream>
-#include <filesystem>
 
 
 
-#include "GUIManager.h"
 #include "Bar.h"
 #include "Button.h"
-#include "ImageManager.h"
 #include "Constants.h"
+#include "GUIManager.h"
+#include "ImageManager.h"
 
 
 class Application
