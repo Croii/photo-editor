@@ -1,9 +1,14 @@
 #include "ImageManager.h"
 
 
+ImageManager::ImageManager() : m_imageLoader(std::unique_ptr<ImageLoader>())
+{
+
+}
+
 void ImageManager::displayImage(sf::RenderWindow& window) const
 {
-	window.draw(sprite);
+	window.draw(m_sprite);
 }
 
 void ImageManager::update(const sf::Event& event)
@@ -15,75 +20,65 @@ void ImageManager::update(const sf::Event& event)
 			zoomDown();
 		else if (event.key.code == sf::Keyboard::B)
 			zoomUp();
-		else if (event.key.code == sf::Keyboard::S)
-			saveImage();
+
 	}
 
 }
 
-void ImageManager::saveImage()
+bool ImageManager::saveImage(const std::string& path) const
 {
-	if (image.getSize().x == 0 || image.getSize().y == 0)
+	if (m_image->getSize().x == 0 || m_image->getSize().y == 0)
 	{
 		std::cout << "No image to save" << std::endl;
-		return;
+		return 0;
 	}
-	std::string path = saveFile();
-	std::cout << path << std::endl;
-	path += "\\image.png";
-	image.saveToFile(path);
+	return m_imageLoader->saveImage(*m_image, path);
+}
+
+void ImageManager::m_imageFitting()
+{
 }
 
 void ImageManager::zoomUp()
 {
-	scale = scale * 1.1f;
+	m_scale = m_scale * 1.1f;
 	updateScale();
 }
 
 void ImageManager::zoomDown()
 {
-	scale = scale * 0.9f;
+	m_scale = m_scale * 0.9f;
 	updateScale();
 }
 
 void ImageManager::updateScale()
 {
-	sprite.setScale(scale, scale);
-	sprite.setPosition(0.0f + constants::CANVAS_X + constants::CANVAS_WIDTH / 2.0f - texture.getSize().x / 2.0f * scale,
-		0.0f + constants::CANVAS_Y + constants::CANVAS_HEIGHT / 2.0f - texture.getSize().y / 2.0f * scale);
+	if (m_texture.getSize().x > constants::CANVAS_HEIGHT || m_texture.getSize().y > constants::CANVAS_WIDTH)
+	{
+		m_scale = std::min(static_cast<float>(constants::CANVAS_HEIGHT) / m_texture.getSize().y,
+			static_cast<float>(constants::CANVAS_WIDTH) / m_texture.getSize().x);
+	}
+
+	m_sprite.setScale(m_scale, m_scale);
+	m_sprite.setPosition(0.0f + constants::CANVAS_X + constants::CANVAS_WIDTH / 2 - m_texture.getSize().x / 2 * m_scale,
+		0.0f + constants::CANVAS_Y + constants::CANVAS_HEIGHT / 2 - m_texture.getSize().y / 2 * m_scale);
 }
 
-void ImageManager::loadImage(const std::string& path)
+bool ImageManager::loadImage(const std::string& path)
 {
-	image = sf::Image();
-
-	if (!image.loadFromFile(path))
+	auto loadedImage = m_imageLoader.get()->loadImage(path);
+	if (loadedImage == nullptr)
 	{
-		std::cout << "Error loading the file" << std::endl;
-	}
-	else
-	{
-		std::cout << "The file was loaded succesfully" << std::endl;
+		return false;
 	}
 
-	texture = sf::Texture();
-	sprite = sf::Sprite();
 
-	scale = 1.0f;
-	texture.loadFromImage(image);
-	sprite.setScale(scale, scale);
-	sprite.setTexture(texture);
-	if (texture.getSize().x > constants::CANVAS_HEIGHT || texture.getSize().y > constants::CANVAS_WIDTH)
-	{
-		scale = std::min(static_cast<float>(constants::CANVAS_HEIGHT) / texture.getSize().y,
-			static_cast<float>(constants::CANVAS_WIDTH) / texture.getSize().x);
-	}
+	m_scale = 1.0f;
+	m_image = std::move(loadedImage);
+	m_texture.loadFromImage(*m_image);
+	m_sprite.setScale(m_scale, m_scale);
+	m_sprite.setTexture(m_texture);
 
-	sprite.setScale(scale, scale);
-	sprite.setPosition(0.0f + constants::CANVAS_X + constants::CANVAS_WIDTH / 2 - texture.getSize().x / 2 * scale,
-		0.0f + constants::CANVAS_Y + constants::CANVAS_HEIGHT / 2 - texture.getSize().y / 2 * scale);
-	std::cout << sprite.getTexture()->getSize().x << " " << sprite.getTexture()->getSize().y << std::endl;
-
-	std::cout << sprite.getGlobalBounds().width << " " << sprite.getGlobalBounds().height << std::endl;
-
+	updateScale();
+	return true;
 }

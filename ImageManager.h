@@ -1,4 +1,5 @@
 #pragma once
+#include "ImageLoader.h"
 #include "Constants.h"
 #include "SFML/Graphics.hpp"
 #include "Utility.h"
@@ -10,23 +11,26 @@
 class ImageManager
 {
 public:
-	ImageManager() = default;
+	ImageManager();
 	~ImageManager() = default;
 	void displayImage(sf::RenderWindow& window) const;
 	void update(const sf::Event& event);
-	void saveImage();
-	void loadImage(const std::string& path);
+
+	bool saveImage(const std::string& path) const;
+	bool loadImage(const std::string& path);
 
 private:
 
+	void m_imageFitting();
 	void zoomUp();
 	void zoomDown();
 	void updateScale();
 
+	float m_scale;
+	std::unique_ptr < ImageLoader> m_imageLoader;
+	std::unique_ptr<sf::Image> m_image;
+	sf::Texture m_texture;
+	sf::Sprite m_sprite;
 
-	float scale;
-	sf::Image image;
-	sf::Texture texture;
-	sf::Sprite sprite;
 
 };

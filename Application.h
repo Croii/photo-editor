@@ -27,16 +27,18 @@ public:
 	void render();
 
 
+	void loadImage();
+	void saveImage();
 private:
 
-	sf::RenderWindow* window;
-	sf::VideoMode videoMode;
-	sf::Event ev;
+	std::unique_ptr<sf::RenderWindow> m_window;
+	sf::VideoMode m_videoMode;
+	sf::Event m_event;
 
-	const std::string title;
+	const std::string M_TITLE;
 
-	GUIManager guiManager;
-	ImageManager imageManager;
+	GUIManager m_guiManager;
+	ImageManager m_imageManager;
 
 	//design 
 	void initGUI();
