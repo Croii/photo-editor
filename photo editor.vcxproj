@@ -141,6 +141,7 @@
     <ClCompile Include="GUIManager.cpp" />
     <ClCompile Include="ImageLoader.cpp" />
     <ClCompile Include="ImageManager.cpp" />
+    <ClCompile Include="RotateImageCommand.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="Utility.cpp" />
   </ItemGroup>
@@ -154,6 +155,7 @@
     <ClInclude Include="ICommand.h" />
     <ClInclude Include="ImageLoader.h" />
     <ClInclude Include="ImageManager.h" />
+    <ClInclude Include="RotateImageCommand.h" />
     <ClInclude Include="Utility.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

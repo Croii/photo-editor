@@ -1,6 +1,6 @@
 #include "GUIManager.h"
 
-std::vector<std::string > GUIManager::assetName = { "saveFile", "selectFile" };
+std::vector<std::string > GUIManager::assetName = { "saveFile", "selectFile", "rotateLeft", "rotateRight" };
 std::unordered_map<std::string, std::shared_ptr<sf::Texture>> GUIManager::assets;
 
 void GUIManager::addElement(std::unique_ptr<GUIElement>&& element)
@@ -8,13 +8,15 @@ void GUIManager::addElement(std::unique_ptr<GUIElement>&& element)
 	guiElements[priority++] = std::move(element);
 }
 
-void GUIManager::renderAll(sf::RenderWindow& window)
+
+
+void GUIManager::drawAll(sf::RenderWindow& window)
 {
 	for (auto& [_, element] : guiElements)
 	{
 		if (element->isVisible())
 		{
-			element->render(window);
+			element->draw(window, sf::RenderStates::Default);
 		}
 	}
 }

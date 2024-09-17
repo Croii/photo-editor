@@ -11,10 +11,9 @@ public:
 	~GUIManager() = default;
 
 	void addElement(std::unique_ptr<GUIElement>&& element);
-	void renderAll(sf::RenderWindow& window);
+
+	void drawAll(sf::RenderWindow& window);
 	void updateAll(sf::Event& event);
-
-
 
 	static void initializeAssests();
 	static std::shared_ptr<sf::Texture> getAsset(const std::string& name) noexcept;

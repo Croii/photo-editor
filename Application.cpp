@@ -54,11 +54,11 @@ void Application::update()
 
 }
 
-void Application::render()
+void Application::draw()
 {
 	m_window->clear(sf::Color(41, 33, 89));
-	m_guiManager.renderAll(*m_window);
-	m_imageManager.displayImage(*m_window);
+	m_imageManager.draw(*m_window, sf::RenderStates::Default);
+	m_guiManager.drawAll(*m_window);
 	m_window->display();
 }
 //private
@@ -104,13 +104,21 @@ void Application::saveImage()
 		return;
 	}
 
-	if (!m_imageManager.saveImage(path));
+	if (!m_imageManager.saveImage(path))
 	{
 		std::cout << "Error saving the file" << std::endl;
 		return;
 	}
 	std::cout << "File save successfully" << std::endl;
 
+}
+
+void Application::rotate(Direction direction)
+{
+	if (direction == Direction::LEFT)
+		m_imageManager.rotate(-1);
+	else if (direction == Direction::RIGHT)
+		m_imageManager.rotate(1);
 }
 
 void Application::initGUI()
@@ -130,6 +138,16 @@ void Application::initGUI()
 		this->saveImage();
 		}, true);
 	m_guiManager.addElement(std::move(saveFileButton));
+
+	auto rotateLeftButton = std::make_unique<Button>(350.0f, 50.0f, 100.0f, 100.0f, "rotateLeft", [this]() {
+		this->rotate(Direction::LEFT);
+		}, true);
+	m_guiManager.addElement(std::move(rotateLeftButton));
+
+	auto rotateRightButton = std::make_unique<Button>(600.0f, 50.0f, 100.0f, 100.0f, "rotateRight", [this]() {
+		this->rotate(Direction::RIGHT);
+		}, true);
+	m_guiManager.addElement(std::move(rotateRightButton));
 
 
 }

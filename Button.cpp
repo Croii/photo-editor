@@ -16,7 +16,7 @@ Button::Button(float pozX, float pozY, float width, float height, std::string as
 	std::cout << boundingBox.getTexture()->getSize().x << " " << boundingBox.getTexture()->getSize().y << std::endl;
 }
 
-void Button::render(sf::RenderTarget& target)
+void Button::draw(sf::RenderTarget& target, sf::RenderStates state) const
 {
 	target.draw(boundingBox);
 }

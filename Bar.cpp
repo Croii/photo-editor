@@ -7,7 +7,7 @@ Bar::Bar(float pozX, float pozY, float width, float height, sf::Color color, boo
 
 }
 
-void Bar::render(sf::RenderTarget& target)
+void Bar::draw(sf::RenderTarget& target, sf::RenderStates states)  const
 {
 	target.draw(boundingBox);
 }

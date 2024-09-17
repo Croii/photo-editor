@@ -13,11 +13,12 @@ class ImageManager
 public:
 	ImageManager();
 	~ImageManager() = default;
-	void displayImage(sf::RenderWindow& window) const;
+	void draw(sf::RenderWindow& window, sf::RenderStates state) const;
 	void update(const sf::Event& event);
 
 	bool saveImage(const std::string& path) const;
 	bool loadImage(const std::string& path);
+	void rotate(float orientation);
 
 private:
 

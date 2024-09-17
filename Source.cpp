@@ -11,7 +11,7 @@ int main()
 	{
 		//Event handling
 		engine.update();
-		engine.render();
+		engine.draw();
 	}
 	return 0;
 }

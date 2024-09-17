@@ -13,7 +13,7 @@ public:
 
 	~Button() = default;
 
-	void render(sf::RenderTarget& target);
+	void draw(sf::RenderTarget& target, sf::RenderStates state) const override;
 	void update(sf::Event& ev);
 
 	bool isHovered(const sf::Vector2f& mousePos);

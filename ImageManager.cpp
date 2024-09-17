@@ -6,7 +6,7 @@ ImageManager::ImageManager() : m_imageLoader(std::unique_ptr<ImageLoader>())
 
 }
 
-void ImageManager::displayImage(sf::RenderWindow& window) const
+void ImageManager::draw(sf::RenderWindow& window, sf::RenderStates) const
 {
 	window.draw(m_sprite);
 }
@@ -27,12 +27,14 @@ void ImageManager::update(const sf::Event& event)
 
 bool ImageManager::saveImage(const std::string& path) const
 {
-	if (m_image->getSize().x == 0 || m_image->getSize().y == 0)
+	if (m_image == nullptr || m_image->getSize().x == 0 || m_image->getSize().y == 0 || path.size() == 0)
 	{
 		std::cout << "No image to save" << std::endl;
 		return 0;
 	}
-	return m_imageLoader->saveImage(*m_image, path);
+	return m_imageLoader->saveImage(m_sprite.getTexture()->copyToImage(), path);
+
+	//return m_imageLoader->saveImage(*m_image, path);
 }
 
 void ImageManager::m_imageFitting()
@@ -81,4 +83,9 @@ bool ImageManager::loadImage(const std::string& path)
 
 	updateScale();
 	return true;
+}
+
+void ImageManager::rotate(float orientation)
+{
+	m_sprite.rotate(orientation);
 }

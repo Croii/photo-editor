@@ -24,11 +24,11 @@ public:
 
 	void pollEvents();
 	void update();
-	void render();
-
+	void draw();
 
 	void loadImage();
 	void saveImage();
+	void rotate(Direction direction);
 private:
 
 	std::unique_ptr<sf::RenderWindow> m_window;
