@@ -1,7 +1,7 @@
 #include "ImageManager.h"
+#include "RotateImageCommand.h"
 
-
-ImageManager::ImageManager() : m_imageLoader(std::unique_ptr<ImageLoader>())
+ImageManager::ImageManager() : m_imageLoader(std::unique_ptr<ImageLoader>()), m_scale(1.0f)
 {
 
 }
@@ -66,6 +66,47 @@ void ImageManager::updateScale()
 		0.0f + constants::CANVAS_Y + constants::CANVAS_HEIGHT / 2 - m_texture.getSize().y / 2 * m_scale);
 }
 
+void ImageManager::rotateLeft()
+{
+	int oldWidth = m_image->getSize().x;
+	int oldHeight = m_image->getSize().y;
+	std::unique_ptr<sf::Image> newImage = std::make_unique<sf::Image>();
+	newImage->create(oldHeight, oldWidth);
+
+	for (int y = 0; y < oldHeight; y++)
+		for (int x = 0; x < oldWidth; x++)
+		{
+			newImage->setPixel(y, (oldWidth - x - 1), m_image->getPixel(x, y));
+		}
+	m_image.swap(newImage);
+	m_texture.loadFromImage(*m_image);
+	m_sprite.setTexture(m_texture, true);
+	newImage = nullptr;
+	updateScale();
+
+
+}
+
+void ImageManager::rotateRight()
+{
+	int oldWidth = m_image->getSize().x;
+	int oldHeight = m_image->getSize().y;
+	std::unique_ptr<sf::Image> newImage = std::make_unique<sf::Image>();
+	newImage->create(oldHeight, oldWidth);
+
+	for (int y = 0; y < oldHeight; y++)
+		for (int x = 0; x < oldWidth; x++)
+		{
+			newImage->setPixel((oldHeight - y - 1), x, m_image->getPixel(x, y));
+		}
+	m_image.swap(newImage);
+	m_texture.loadFromImage(*m_image);
+	m_sprite.setTexture(m_texture, true);
+	newImage = nullptr;
+	updateScale();
+
+}
+
 bool ImageManager::loadImage(const std::string& path)
 {
 	auto loadedImage = m_imageLoader.get()->loadImage(path);
@@ -85,7 +126,27 @@ bool ImageManager::loadImage(const std::string& path)
 	return true;
 }
 
-void ImageManager::rotate(float orientation)
+void ImageManager::rotate(Orientation orientation)
 {
-	m_sprite.rotate(orientation);
+	if (m_image == nullptr)
+		return;
+	auto command = std::make_unique<RotateImageCommand>(*this, orientation);
+	m_commandManager.executeCommand(std::move(command));
+
+
+}
+
+void ImageManager::undo()
+{
+	m_commandManager.undo();
+}
+
+void ImageManager::redo()
+{
+	m_commandManager.redo();
+}
+
+void ImageManager::executeCommand(std::unique_ptr<ICommand> command)
+{
+	m_commandManager.executeCommand(std::move(command));
 }

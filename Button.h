@@ -10,7 +10,6 @@ class Button :
 public:
 	Button(float pozX, float pozY, float width, float height, sf::Color color, std::function<void()>, bool isVisible = true);
 	Button(float pozX, float pozY, float width, float height, std::string asset, std::function<void()>, bool isVisible = true);
-
 	~Button() = default;
 
 	void draw(sf::RenderTarget& target, sf::RenderStates state) const override;

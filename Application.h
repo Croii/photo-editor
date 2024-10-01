@@ -28,7 +28,7 @@ public:
 
 	void loadImage();
 	void saveImage();
-	void rotate(Direction direction);
+	void rotate(Orientation orientation);
 private:
 
 	std::unique_ptr<sf::RenderWindow> m_window;

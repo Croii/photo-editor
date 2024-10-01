@@ -1,11 +1,11 @@
 #pragma once
-
+#define NOMINMAX
 #include <windows.h>
 #include <shlobj.h>     // For SHBrowseForFolder
 #include <commdlg.h>    // For OPENFILENAME
 #include <string>
 
-enum class Direction
+enum class Orientation
 {
 	LEFT,
 	RIGHT

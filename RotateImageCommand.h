@@ -1,18 +1,22 @@
 #pragma once
 #include "ICommand.h"
+#include "Utility.h"
+
 #include "ImageManager.h"
+
+class ImageManager;
 
 class RotateImageCommand : public ICommand
 {
 public:
-	RotateImageCommand(ImageManager& imageManager, float newOrientation);
+	RotateImageCommand(ImageManager& imageManager, Orientation newOrientation);
 	void execute() override;
 	void undo() override;
 
 private:
 	ImageManager& m_imageManager;
-	float m_newOrientation;
-	float m_oldOrientation;
+	Orientation m_newOrientation;
+	Orientation m_oldOrientation;
 
 };
 

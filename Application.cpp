@@ -36,9 +36,16 @@ void Application::pollEvents()
 		case sf::Event::KeyPressed:
 			if (m_event.key.code == sf::Keyboard::Escape)
 				m_window->close();
+			else if (m_event.key.code == sf::Keyboard::Z)
+			{
+				m_imageManager.undo();
+			}
+			else if (m_event.key.code == sf::Keyboard::R)
+			{
+				m_imageManager.redo();
+			}
 			break;
-			//case sf::Event::MouseMoved:
-			//	std::cout << sf::Mouse::getPosition().x << " " << sf::Mouse::getPosition().y << std::endl;
+
 		}
 
 		m_guiManager.updateAll(m_event);
@@ -113,12 +120,10 @@ void Application::saveImage()
 
 }
 
-void Application::rotate(Direction direction)
+void Application::rotate(Orientation orientation)
 {
-	if (direction == Direction::LEFT)
-		m_imageManager.rotate(-1);
-	else if (direction == Direction::RIGHT)
-		m_imageManager.rotate(1);
+
+	m_imageManager.rotate(orientation);
 }
 
 void Application::initGUI()
@@ -140,12 +145,12 @@ void Application::initGUI()
 	m_guiManager.addElement(std::move(saveFileButton));
 
 	auto rotateLeftButton = std::make_unique<Button>(350.0f, 50.0f, 100.0f, 100.0f, "rotateLeft", [this]() {
-		this->rotate(Direction::LEFT);
+		this->rotate(Orientation::LEFT);
 		}, true);
 	m_guiManager.addElement(std::move(rotateLeftButton));
 
-	auto rotateRightButton = std::make_unique<Button>(600.0f, 50.0f, 100.0f, 100.0f, "rotateRight", [this]() {
-		this->rotate(Direction::RIGHT);
+	auto rotateRightButton = std::make_unique<Button>(500.0f, 50.0f, 100.0f, 100.0f, "rotateRight", [this]() {
+		this->rotate(Orientation::RIGHT);
 		}, true);
 	m_guiManager.addElement(std::move(rotateRightButton));
 
