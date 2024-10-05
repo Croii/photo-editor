@@ -3,7 +3,7 @@
 #include <memory>
 #include <vector>
 
-class CommandManger
+class CommandManager
 {
 public:
 	void executeCommand(std::unique_ptr<ICommand> command);

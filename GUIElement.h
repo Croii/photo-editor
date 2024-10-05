@@ -17,7 +17,7 @@ public:
 	bool isVisible() const;
 
 protected:
-	bool visible;
+	bool m_visible;
 
 };
 

@@ -21,6 +21,6 @@ public:
 
 
 private:
-	sf::RectangleShape boundingBox;
+	sf::RectangleShape m_boundingBox;
 
 };

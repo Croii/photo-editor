@@ -107,6 +107,50 @@ void ImageManager::rotateRight()
 
 }
 
+void ImageManager::grayScale()
+{
+	int width = m_image->getSize().x;
+	int height = m_image->getSize().y;
+
+	for (int i = 0; i < width; i++)
+		for (int j = 0; j < height; j++)
+		{
+			int red = m_image->getPixel(i, j).r;
+			int green = m_image->getPixel(i, j).g;
+			int blue = m_image->getPixel(i, j).b;
+
+			red = static_cast<int>(red * 0.299);
+			green = static_cast<int>(green * 0.299);
+			blue = static_cast<int>(blue * 0.299);
+			m_image->setPixel(i, j, sf::Color(red,green,blue));
+		}
+	m_texture.loadFromImage(*m_image);
+	m_sprite.setTexture(m_texture);
+}
+
+std::unique_ptr<sf::Image> ImageManager::getImage() const
+{
+	int width = m_image->getSize().x;
+	int height = m_image->getSize().y;
+	std::unique_ptr<sf::Image> imageCopy = std::make_unique<sf::Image>();
+	imageCopy->create(width, height);
+	for (int i = 0; i < width; i++)
+		for (int j = 0; j < height; j++)
+		{
+			imageCopy->setPixel(i,j ,m_image->getPixel(i,j));
+		}
+	return imageCopy;
+}
+
+bool ImageManager::loadImage(std::unique_ptr<sf::Image> image)
+{
+	if (image == nullptr)
+		return 0;
+	m_image = nullptr;
+	m_image = std::move(image);
+	return 1;
+}
+
 bool ImageManager::loadImage(const std::string& path)
 {
 	auto loadedImage = m_imageLoader.get()->loadImage(path);

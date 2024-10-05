@@ -18,8 +18,8 @@ public:
 	bool isHovered(const sf::Vector2f& mousePos);
 
 private:
-	sf::RectangleShape boundingBox;
-	sf::Texture texture;
-	std::function<void()> onclick;
+	sf::RectangleShape m_boundingBox;
+	sf::Texture m_texture;
+	std::function<void()> m_onclick;
 };
 

@@ -6,7 +6,6 @@
 #include <string>	
 
 
-
 #include "Bar.h"
 #include "Button.h"
 #include "Constants.h"
@@ -29,6 +28,7 @@ public:
 	void loadImage();
 	void saveImage();
 	void rotate(Orientation orientation);
+	void grayScale();
 private:
 
 	std::unique_ptr<sf::RenderWindow> m_window;

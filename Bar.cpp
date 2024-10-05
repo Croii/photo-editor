@@ -1,15 +1,15 @@
 #include "Bar.h"
 
-Bar::Bar(float pozX, float pozY, float width, float height, sf::Color color, bool isVisible) : GUIElement(isVisible), boundingBox({ width,height })
+Bar::Bar(float pozX, float pozY, float width, float height, sf::Color color, bool isVisible) : GUIElement(isVisible), m_boundingBox({ width,height })
 {
-	boundingBox.setPosition({ pozX,pozY });
-	boundingBox.setFillColor(color);
+	m_boundingBox.setPosition({ pozX,pozY });
+	m_boundingBox.setFillColor(color);
 
 }
 
 void Bar::draw(sf::RenderTarget& target, sf::RenderStates states)  const
 {
-	target.draw(boundingBox);
+	target.draw(m_boundingBox);
 }
 
 void Bar::update(sf::Event& ev)

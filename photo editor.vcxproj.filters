@@ -41,7 +41,10 @@
     <ClCompile Include="RotateImageCommand.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CommandManger.cpp">
+    <ClCompile Include="CommandManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GrayscaleCommand.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -79,7 +82,10 @@
     <ClInclude Include="RotateImageCommand.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CommandManger.h">
+    <ClInclude Include="CommandManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GrayscaleCommand.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

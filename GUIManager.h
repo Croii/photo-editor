@@ -19,12 +19,12 @@ public:
 	static std::shared_ptr<sf::Texture> getAsset(const std::string& name) noexcept;
 
 private:
-	static std::unordered_map<std::string, std::shared_ptr<sf::Texture>> assets;
-	static std::vector<std::string > assetName;
+	static std::unordered_map<std::string, std::shared_ptr<sf::Texture>> M_ASSETS;
+	static std::vector<std::string > M_ASSETNAME;
 
 	int priority = 0;
 	using GUIElement_ptr = std::unique_ptr<GUIElement>;
-	std::unordered_map <int, GUIElement_ptr > guiElements;
+	std::unordered_map <int, GUIElement_ptr > m_guiElements;
 
 };
 

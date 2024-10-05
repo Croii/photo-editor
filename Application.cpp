@@ -126,6 +126,11 @@ void Application::rotate(Orientation orientation)
 	m_imageManager.rotate(orientation);
 }
 
+void Application::grayScale()
+{
+	m_imageManager.grayScale();
+}
+
 void Application::initGUI()
 {
 	//adding a top bar
@@ -154,6 +159,9 @@ void Application::initGUI()
 		}, true);
 	m_guiManager.addElement(std::move(rotateRightButton));
 
-
+	auto grayScaleButton = std::make_unique<Button>(650.0f, 50.0f, 100.0f, 100.0f, "grayScale", [this]() {
+		this->grayScale();
+		}, true);
+	m_guiManager.addElement(std::move(grayScaleButton));
 }
 

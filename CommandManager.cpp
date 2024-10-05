@@ -1,13 +1,13 @@
-#include "CommandManger.h"
+#include "CommandManager.h"
 
-void CommandManger::executeCommand(std::unique_ptr<ICommand> command)
+void CommandManager::executeCommand(std::unique_ptr<ICommand> command)
 {
 	command->execute();
 	m_undoStack.push_back(std::move(command));
 	m_redoStack.clear();
 }
 
-void CommandManger::undo()
+void CommandManager::undo()
 {
 	if (m_undoStack.empty())
 		return;
@@ -20,7 +20,7 @@ void CommandManger::undo()
 }
 
 #include <iostream>
-void CommandManger::redo()
+void CommandManager::redo()
 {
 	if (m_redoStack.empty())
 		return;

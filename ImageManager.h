@@ -1,5 +1,5 @@
 #pragma once
-#include "CommandManger.h"
+#include "CommandManager.h"
 #include "Constants.h"
 #include "ImageLoader.h"
 
@@ -23,6 +23,7 @@ public:
 
 	bool saveImage(const std::string& path) const;
 	bool loadImage(const std::string& path);
+	bool loadImage(std::unique_ptr<sf::Image> image);
 	void rotate(Orientation orientation);
 
 	void undo();
@@ -32,6 +33,8 @@ public:
 
 	void rotateLeft();
 	void rotateRight();
+	void grayScale();
+	std::unique_ptr<sf::Image> getImage() const;
 private:
 
 	void m_imageFitting();
@@ -42,7 +45,7 @@ private:
 	float m_scale;
 	std::unique_ptr <ImageLoader> m_imageLoader;
 	std::unique_ptr<sf::Image> m_image;
-	CommandManger m_commandManager;
+	CommandManager m_commandManager;
 	sf::Texture m_texture;
 	sf::Sprite m_sprite;
 

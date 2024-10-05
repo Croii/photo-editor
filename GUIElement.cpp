@@ -2,7 +2,7 @@
 
 
 
-GUIElement::GUIElement(bool visible) : visible(visible)
+GUIElement::GUIElement(bool visible) : m_visible(visible)
 {
 }
 
@@ -10,5 +10,5 @@ GUIElement::GUIElement(bool visible) : visible(visible)
 
 bool GUIElement::isVisible() const
 {
-	return visible;
+	return m_visible;
 }
