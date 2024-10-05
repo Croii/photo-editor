@@ -7,7 +7,7 @@ std::unique_ptr<sf::Image> ImageLoader::loadImage(const std::string& path)
 
 		return nullptr;
 	}
-	return std::move(image);
+	return image;
 }
 
 bool ImageLoader::saveImage(const sf::Image& image, const std::string& path)

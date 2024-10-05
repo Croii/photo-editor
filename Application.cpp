@@ -120,8 +120,6 @@ void Application::saveImage()
 
 void Application::rotate(Orientation orientation)
 {
-
-	//m_imageManager.rotate(orientation);
 	std::unique_ptr <ICommand> command = std::make_unique<RotateImageCommand>(m_imageManager, orientation);
 
 	m_commandManager.executeCommand(std::move(command));
@@ -130,7 +128,6 @@ void Application::rotate(Orientation orientation)
 
 void Application::grayScale()
 {
-
 	std::unique_ptr<ICommand> command = std::make_unique<GrayscaleCommand>(m_imageManager,m_imageManager.getImage());
 	m_commandManager.executeCommand(std::move(command));
 }

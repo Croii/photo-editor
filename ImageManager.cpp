@@ -121,7 +121,8 @@ void ImageManager::grayScale()
 			red = static_cast<int>(red * 0.299);
 			green = static_cast<int>(green * 0.299);
 			blue = static_cast<int>(blue * 0.299);
-			m_image->setPixel(i, j, sf::Color(red,green,blue));
+			int gray = std::min(blue + red + blue, 255);
+			m_image->setPixel(i, j, sf::Color(gray, gray, gray));
 		}
 	m_texture.loadFromImage(*m_image);
 	m_sprite.setTexture(m_texture);
@@ -177,31 +178,25 @@ void ImageManager::rotate(Orientation orientation)
 
 bool ImageManager::loadImage(const std::string& path)
 {
-	auto loadedImage = m_imageLoader.get()->loadImage(path);
+
+	auto loadedImage = m_imageLoader->loadImage(path);
 	if (loadedImage == nullptr)
 	{
 		return false;
 	}
 
-
 	m_scale = 1.0f;
+	
+
+	//reinitialization prevents visual glitch
+    m_image = std::make_unique<sf::Image>();
 	m_image = std::move(loadedImage);
+	m_texture = sf::Texture();
 	m_texture.loadFromImage(*m_image);
-	m_sprite.setScale(m_scale, m_scale);
+	m_sprite = sf::Sprite();
 	m_sprite.setTexture(m_texture);
+	m_sprite.setScale(m_scale, m_scale);
 
 	updateScale();
 	return true;
 }
-
-//void ImageManager::rotate(Orientation orientation)
-//{
-//	if (m_image == nullptr)
-//		return;
-//	auto command = std::make_unique<RotateImageCommand>(*this, orientation);
-//	m_commandManager.executeCommand(std::move(command));
-//
-//
-//}
-
-

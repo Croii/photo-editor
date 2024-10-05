@@ -17,9 +17,6 @@ public:
 	void update(sf::Event& event) override;
 	bool isHovered(const sf::Vector2f& mousePos) override;
 
-
-
-
 private:
 	sf::RectangleShape m_boundingBox;
 

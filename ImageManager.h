@@ -28,8 +28,6 @@ public:
 	void rotate(Orientation orientation);
 
 	
-
-
 	void rotateLeft();
 	void rotateRight();
 	void grayScale();

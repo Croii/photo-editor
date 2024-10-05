@@ -13,6 +13,6 @@ public:
 
 private:
 	ImageManager& m_imageManager;
-	std::unique_ptr<sf::Image> m_oldImage;
+	sf::Image m_oldImage;
 };
 

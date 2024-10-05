@@ -1,6 +1,6 @@
 #include "GrayscaleCommand.h"
 
-GrayscaleCommand::GrayscaleCommand(ImageManager& imageManager, std::unique_ptr<sf::Image> image) : m_imageManager(imageManager),m_oldImage(std::move(image))
+GrayscaleCommand::GrayscaleCommand(ImageManager& imageManager, std::unique_ptr<sf::Image> image) : m_imageManager(imageManager),m_oldImage(*image)
 {
 	
 }
@@ -13,5 +13,5 @@ void GrayscaleCommand::execute()
 
 void GrayscaleCommand::undo()
 {
-	m_imageManager.loadImage(std::move(m_oldImage));
+	m_imageManager.loadImage(m_oldImage);
 }
