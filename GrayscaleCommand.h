@@ -7,7 +7,7 @@
 class GrayscaleCommand : public ICommand
 {
 public:
-	GrayscaleCommand(ImageManager& imageManager);
+	GrayscaleCommand(ImageManager& imageManager, std::unique_ptr<sf::Image> image);
 	void execute() override;
 	void undo() override;
 

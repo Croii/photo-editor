@@ -4,7 +4,6 @@
 
 #include "ImageManager.h"
 
-//class ImageManager;
 
 class RotateImageCommand : public ICommand
 {

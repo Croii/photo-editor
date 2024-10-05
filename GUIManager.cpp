@@ -1,7 +1,7 @@
 #include "GUIManager.h"
 
-std::vector<std::string > GUIManager::M_ASSETNAME = { "saveFile", "selectFile", "rotateLeft", "rotateRight", "grayScale"};
-std::unordered_map<std::string, std::shared_ptr<sf::Texture>> GUIManager::M_ASSETS;
+std::vector<std::string > GUIManager::S_ASSETNAME = { "saveFile", "selectFile", "rotateLeft", "rotateRight", "grayScale"};
+std::unordered_map<std::string, std::shared_ptr<sf::Texture>> GUIManager::S_ASSETS;
 
 void GUIManager::addElement(std::unique_ptr<GUIElement>&& element)
 {
@@ -32,12 +32,12 @@ void GUIManager::updateAll(sf::Event& ev)
 
 void GUIManager::initializeAssests()
 {
-	for (auto& name : M_ASSETNAME)
+	for (auto& name : S_ASSETNAME)
 	{
 		auto texture = std::make_shared<sf::Texture>();
 		if (texture->loadFromFile("Assets\\" + name + ".png")) {
 			//here is the good texture
-			M_ASSETS.insert({ name ,texture });
+			S_ASSETS.insert({ name ,texture });
 		}
 	}
 
@@ -45,5 +45,5 @@ void GUIManager::initializeAssests()
 
 std::shared_ptr<sf::Texture> GUIManager::getAsset(const std::string& name) noexcept
 {
-	return M_ASSETS[name];
+	return S_ASSETS[name];
 }

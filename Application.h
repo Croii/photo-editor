@@ -11,6 +11,8 @@
 #include "Constants.h"
 #include "GUIManager.h"
 #include "ImageManager.h"
+#include "RotateImageCommand.h"
+#include "GrayscaleCommand.h"
 
 
 class Application
@@ -39,6 +41,7 @@ private:
 
 	GUIManager m_guiManager;
 	ImageManager m_imageManager;
+	CommandManager m_commandManager;
 
 	//design 
 	void initGUI();

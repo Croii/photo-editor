@@ -18,8 +18,6 @@ void RotateImageCommand::undo()
 {
 	if (m_oldOrientation == Orientation::LEFT)
 		m_imageManager.rotateRight();
-	//m_imageManager.rotate(Orientation::RIGHT);
 	else if (m_oldOrientation == Orientation::RIGHT)
 		m_imageManager.rotateLeft();
-		//_imageManager.rotate(Orientation::LEFT);
 }

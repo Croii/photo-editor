@@ -23,12 +23,11 @@ public:
 
 	bool saveImage(const std::string& path) const;
 	bool loadImage(const std::string& path);
+	bool loadImage(sf::Image& image);
 	bool loadImage(std::unique_ptr<sf::Image> image);
 	void rotate(Orientation orientation);
 
-	void undo();
-	void redo();
-	void executeCommand(std::unique_ptr <ICommand> command);
+	
 
 
 	void rotateLeft();
@@ -45,7 +44,6 @@ private:
 	float m_scale;
 	std::unique_ptr <ImageLoader> m_imageLoader;
 	std::unique_ptr<sf::Image> m_image;
-	CommandManager m_commandManager;
 	sf::Texture m_texture;
 	sf::Sprite m_sprite;
 

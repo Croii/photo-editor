@@ -84,7 +84,6 @@ void ImageManager::rotateLeft()
 	newImage = nullptr;
 	updateScale();
 
-
 }
 
 void ImageManager::rotateRight()
@@ -142,13 +141,38 @@ std::unique_ptr<sf::Image> ImageManager::getImage() const
 	return imageCopy;
 }
 
+bool ImageManager::loadImage(sf::Image& image)
+{
+	if (image.getSize().x == 0 || image.getSize().y == 0)
+		return 0;
+	m_image = std::make_unique<sf::Image>(image);
+	m_texture.loadFromImage(*m_image);
+	m_sprite.setScale(m_scale, m_scale);
+	m_sprite.setTexture(m_texture);
+	updateScale();
+
+}
+
 bool ImageManager::loadImage(std::unique_ptr<sf::Image> image)
 {
 	if (image == nullptr)
-		return 0;
+		return false;
 	m_image = nullptr;
 	m_image = std::move(image);
-	return 1;
+	m_texture.loadFromImage(*m_image);
+	m_sprite.setScale(m_scale, m_scale);
+	m_sprite.setTexture(m_texture);
+
+	updateScale();
+	return true;
+}
+
+void ImageManager::rotate(Orientation orientation)
+{
+	if (orientation == Orientation::LEFT)
+		rotateLeft();
+	else if (orientation == Orientation::RIGHT)
+		rotateRight();
 }
 
 bool ImageManager::loadImage(const std::string& path)
@@ -170,27 +194,14 @@ bool ImageManager::loadImage(const std::string& path)
 	return true;
 }
 
-void ImageManager::rotate(Orientation orientation)
-{
-	if (m_image == nullptr)
-		return;
-	auto command = std::make_unique<RotateImageCommand>(*this, orientation);
-	m_commandManager.executeCommand(std::move(command));
+//void ImageManager::rotate(Orientation orientation)
+//{
+//	if (m_image == nullptr)
+//		return;
+//	auto command = std::make_unique<RotateImageCommand>(*this, orientation);
+//	m_commandManager.executeCommand(std::move(command));
+//
+//
+//}
 
 
-}
-
-void ImageManager::undo()
-{
-	m_commandManager.undo();
-}
-
-void ImageManager::redo()
-{
-	m_commandManager.redo();
-}
-
-void ImageManager::executeCommand(std::unique_ptr<ICommand> command)
-{
-	m_commandManager.executeCommand(std::move(command));
-}
