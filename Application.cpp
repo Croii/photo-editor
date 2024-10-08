@@ -42,6 +42,7 @@ void Application::pollEvents()
 			{
 				m_commandManager.redo();
 			}
+		
 			break;
 
 		}
@@ -132,10 +133,17 @@ void Application::grayScale()
 	m_commandManager.executeCommand(std::move(command));
 }
 
+void Application::blur()
+{
+	std::unique_ptr<ICommand> command = std::make_unique < BlurCommand>(m_imageManager, m_imageManager.getImage());
+	m_commandManager.executeCommand(std::move(command));
+}
+
+
 void Application::initGUI()
 {
 	//adding a top bar
-	auto topBar = std::make_unique<Bar>(0.0f, 0.0f, constants::NAVIGATION_BAR_WIDTH, constants::NAVIGATION_BAR_HEIGHT, sf::Color(28, 91, 161));//need to fix 
+	auto topBar = std::make_unique<Bar>(0.0f, 0.0f, constants::NAVIGATION_BAR_WIDTH, constants::NAVIGATION_BAR_HEIGHT, sf::Color(28, 91, 161));
 	m_guiManager.addElement(std::move(topBar));
 
 	//adding a buttons
@@ -164,5 +172,10 @@ void Application::initGUI()
 		this->grayScale();
 		}, true);
 	m_guiManager.addElement(std::move(grayScaleButton));
+
+	auto blurButton = std::make_unique<Button>(800.0f, 50.0f, 100.0f, 100.0f, "blur", [this]() {
+		this->blur();
+		}, true);
+	m_guiManager.addElement(std::move(blurButton));
 }
 

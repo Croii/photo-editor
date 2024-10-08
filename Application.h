@@ -13,7 +13,7 @@
 #include "ImageManager.h"
 #include "RotateImageCommand.h"
 #include "GrayscaleCommand.h"
-
+#include "BlurCommand.h"
 
 class Application
 {
@@ -31,6 +31,7 @@ public:
 	void saveImage();
 	void rotate(Orientation orientation);
 	void grayScale();
+	void blur();
 private:
 
 	std::unique_ptr<sf::RenderWindow> m_window;

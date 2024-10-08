@@ -136,6 +136,7 @@
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="Bar.cpp" />
+    <ClCompile Include="BlurCommand.cpp" />
     <ClCompile Include="GrayscaleCommand.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="CommandManager.cpp" />
@@ -150,6 +151,7 @@
   <ItemGroup>
     <ClInclude Include="Application.h" />
     <ClInclude Include="Bar.h" />
+    <ClInclude Include="BlurCommand.h" />
     <ClInclude Include="GrayscaleCommand.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="CommandManager.h" />

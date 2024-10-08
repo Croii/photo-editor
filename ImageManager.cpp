@@ -128,6 +128,59 @@ void ImageManager::grayScale()
 	m_sprite.setTexture(m_texture);
 }
 
+//blur
+void ImageManager::blur()
+{
+	int width = m_image->getSize().x;
+	int height = m_image->getSize().y;
+
+	sf::Image newImage;
+	newImage.create(width, height);
+
+	const int DIRECTIONS = 9;
+	const int KERNELSIZE = 3;
+
+	const std::array<std::array<int, KERNELSIZE>, KERNELSIZE> KERNEL = { { {1,2,1},{2,4,2},{1,2,1} } };
+	const std::array<int, DIRECTIONS> dx = { 0, 0, 0, 1, 1, 1, -1, -1, -1 };
+	const std::array<int, DIRECTIONS> dy = { 0, -1, 1, 1, 0, -1, 1, 0, -1 };
+
+
+	for (int i = 0; i < width; i++)
+		for (int j = 0; j < height; j++)
+		{
+			unsigned int newR = 0;
+			unsigned int newG = 0;
+			unsigned int newB = 0;
+
+			int cnt = 0;
+			for (int k = 0; k < DIRECTIONS; k++)
+			{
+				int x = i + dx[k];
+				int y = j + dy[k];
+
+				bool outOfBoundX = (x < 0) || (x >= width);
+				bool outOfBoundY = (y < 0) || (y >= height);
+				if (!outOfBoundX && !outOfBoundY)
+				{
+					cnt += KERNEL[dx[k] + 1][dy[k] + 1];
+					newR += m_image->getPixel(x, y).r * KERNEL[dx[k] + 1][dy[k] + 1];
+					newG += m_image->getPixel(x, y).g * KERNEL[dx[k] + 1][dy[k] + 1];
+					newB += m_image->getPixel(x, y).b * KERNEL[dx[k] + 1][dy[k] + 1];
+				}
+
+			}
+			newR /= cnt;
+			newG /= cnt;
+			newB /= cnt;
+			newImage.setPixel(i, j, sf::Color(newR, newG, newB));
+		}
+	m_image = std::make_unique<sf::Image>(newImage);
+	m_texture.loadFromImage(*m_image);
+	m_sprite.setTexture(m_texture);
+}
+
+
+
 std::unique_ptr<sf::Image> ImageManager::getImage() const
 {
 	int width = m_image->getSize().x;
@@ -137,7 +190,7 @@ std::unique_ptr<sf::Image> ImageManager::getImage() const
 	for (int i = 0; i < width; i++)
 		for (int j = 0; j < height; j++)
 		{
-			imageCopy->setPixel(i,j ,m_image->getPixel(i,j));
+			imageCopy->setPixel(i, j, m_image->getPixel(i, j));
 		}
 	return imageCopy;
 }
@@ -186,10 +239,10 @@ bool ImageManager::loadImage(const std::string& path)
 	}
 
 	m_scale = 1.0f;
-	
+
 
 	//reinitialization prevents visual glitch
-    m_image = std::make_unique<sf::Image>();
+	m_image = std::make_unique<sf::Image>();
 	m_image = std::move(loadedImage);
 	m_texture = sf::Texture();
 	m_texture.loadFromImage(*m_image);

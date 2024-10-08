@@ -9,6 +9,7 @@
 #include <cstdint>
 #include <iostream>
 #include <string>
+#include <array>
 //#include "RotateImageCommand.h"
 
 class RotateImageCommand;
@@ -31,6 +32,7 @@ public:
 	void rotateLeft();
 	void rotateRight();
 	void grayScale();
+	void blur();
 	std::unique_ptr<sf::Image> getImage() const;
 private:
 
