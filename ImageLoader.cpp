@@ -10,7 +10,8 @@ std::unique_ptr<sf::Image> ImageLoader::loadImage(const std::string& path)
 	return image;
 }
 
-bool ImageLoader::saveImage(const sf::Image& image, const std::string& path)
+//save image to the specified path
+bool ImageLoader::saveImage(const sf::Image& image, const std::string& path) const
 {
 	return image.saveToFile(path + "\\image.png");
 }

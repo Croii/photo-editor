@@ -33,7 +33,7 @@ void Button::update(sf::Event& ev)
 	}
 }
 
-bool Button::isHovered(const sf::Vector2f& mousePos)
+bool Button::isHovered(const sf::Vector2f& mousePos) const
 {
 
 	return m_boundingBox.getGlobalBounds().contains(mousePos);

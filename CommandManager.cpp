@@ -20,6 +20,8 @@ void CommandManager::undo()
 }
 
 #include <iostream>
+
+//executes the last command that was undone and moves it to the undo stack
 void CommandManager::redo()
 {
 	if (m_redoStack.empty())
@@ -31,4 +33,11 @@ void CommandManager::redo()
 	m_undoStack.push_back(std::move(command));
 	command = nullptr;
 	std::cout << "executed redo";
+}
+
+//it clears both undo and redo stacks
+void CommandManager::clear()
+{
+	m_undoStack.clear();
+	m_redoStack.clear();
 }

@@ -6,9 +6,9 @@ Application::Application()
 {
 
 	GUIManager::initializeAssests();
-	initVariables();
-	initWindow();
-	initGUI();
+	m_initVariables();
+	m_initWindow();
+	m_initGUI();
 }
 
 Application::~Application()
@@ -42,7 +42,6 @@ void Application::pollEvents()
 			{
 				m_commandManager.redo();
 			}
-		
 			break;
 
 		}
@@ -67,15 +66,14 @@ void Application::draw()
 	m_guiManager.drawAll(*m_window);
 	m_window->display();
 }
-//private
 
 
-void Application::initVariables()
+void Application::m_initVariables()
 {
 	m_window = nullptr;
 }
 
-void Application::initWindow()
+void Application::m_initWindow()
 {
 	m_videoMode = sf::VideoMode::getDesktopMode();
 	m_window = std::make_unique<sf::RenderWindow>(m_videoMode, M_TITLE, sf::Style::Fullscreen);
@@ -97,11 +95,11 @@ void Application::loadImage()
 	}
 
 	std::cout << "File loaded successfully" << std::endl;
-
+	m_commandManager.clear();
 
 }
 
-void Application::saveImage()
+void Application::saveImage() const
 {
 	std::string path = saveFile();
 	if (path.empty())
@@ -140,7 +138,7 @@ void Application::blur()
 }
 
 
-void Application::initGUI()
+void Application::m_initGUI()
 {
 	//adding a top bar
 	auto topBar = std::make_unique<Bar>(0.0f, 0.0f, constants::NAVIGATION_BAR_WIDTH, constants::NAVIGATION_BAR_HEIGHT, sf::Color(28, 91, 161));

@@ -36,10 +36,9 @@ public:
 	std::unique_ptr<sf::Image> getImage() const;
 private:
 
-	void m_imageFitting();
-	void zoomUp();
-	void zoomDown();
-	void updateScale();
+	void m_zoomUp();
+	void m_zoomDown();
+	void m_updateScale();
 
 	float m_scale;
 	std::unique_ptr <ImageLoader> m_imageLoader;

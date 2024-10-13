@@ -17,12 +17,10 @@ void ImageManager::update(const sf::Event& event)
 	{
 	case sf::Event::KeyPressed:
 		if (event.key.code == sf::Keyboard::A)
-			zoomDown();
+			m_zoomDown();
 		else if (event.key.code == sf::Keyboard::B)
-			zoomUp();
-
+			m_zoomUp();
 	}
-
 }
 
 bool ImageManager::saveImage(const std::string& path) const
@@ -37,35 +35,36 @@ bool ImageManager::saveImage(const std::string& path) const
 	//return m_imageLoader->saveImage(*m_image, path);
 }
 
-void ImageManager::m_imageFitting()
-{
-}
 
-void ImageManager::zoomUp()
+void ImageManager::m_zoomUp()
 {
 	m_scale = m_scale * 1.1f;
-	updateScale();
+	m_updateScale();
 }
 
-void ImageManager::zoomDown()
+void ImageManager::m_zoomDown()
 {
 	m_scale = m_scale * 0.9f;
-	updateScale();
+	m_updateScale();
 }
 
-void ImageManager::updateScale()
+//update the image scale so that it fits the canvas
+void ImageManager::m_updateScale()
 {
 	if (m_texture.getSize().x > constants::CANVAS_HEIGHT || m_texture.getSize().y > constants::CANVAS_WIDTH)
 	{
 		m_scale = std::min(static_cast<float>(constants::CANVAS_HEIGHT) / m_texture.getSize().y,
 			static_cast<float>(constants::CANVAS_WIDTH) / m_texture.getSize().x);
 	}
-
+	else
+	
 	m_sprite.setScale(m_scale, m_scale);
 	m_sprite.setPosition(0.0f + constants::CANVAS_X + constants::CANVAS_WIDTH / 2 - m_texture.getSize().x / 2 * m_scale,
 		0.0f + constants::CANVAS_Y + constants::CANVAS_HEIGHT / 2 - m_texture.getSize().y / 2 * m_scale);
 }
 
+
+//load the image into a temporary object and process every pixel	
 void ImageManager::rotateLeft()
 {
 	int oldWidth = m_image->getSize().x;
@@ -78,11 +77,12 @@ void ImageManager::rotateLeft()
 		{
 			newImage->setPixel(y, (oldWidth - x - 1), m_image->getPixel(x, y));
 		}
+	//clear the old one and load the newly created one
 	m_image.swap(newImage);
 	m_texture.loadFromImage(*m_image);
 	m_sprite.setTexture(m_texture, true);
 	newImage = nullptr;
-	updateScale();
+	m_updateScale();
 
 }
 
@@ -102,7 +102,7 @@ void ImageManager::rotateRight()
 	m_texture.loadFromImage(*m_image);
 	m_sprite.setTexture(m_texture, true);
 	newImage = nullptr;
-	updateScale();
+	m_updateScale();
 
 }
 
@@ -128,7 +128,7 @@ void ImageManager::grayScale()
 	m_sprite.setTexture(m_texture);
 }
 
-//blur
+//convolution between the image and the kernel
 void ImageManager::blur()
 {
 	int width = m_image->getSize().x;
@@ -140,7 +140,9 @@ void ImageManager::blur()
 	const int DIRECTIONS = 9;
 	const int KERNELSIZE = 3;
 
-	const std::array<std::array<int, KERNELSIZE>, KERNELSIZE> KERNEL = { { {1,2,1},{2,4,2},{1,2,1} } };
+	//blur kernel
+	const std::array<std::array<int, KERNELSIZE>, KERNELSIZE> KERNEL = { { {1,2,1},{2,0,2},{1,2,1} } };
+	//every neighbour + the cell itself up 
 	const std::array<int, DIRECTIONS> dx = { 0, 0, 0, 1, 1, 1, -1, -1, -1 };
 	const std::array<int, DIRECTIONS> dy = { 0, -1, 1, 1, 0, -1, 1, 0, -1 };
 
@@ -158,8 +160,12 @@ void ImageManager::blur()
 				int x = i + dx[k];
 				int y = j + dy[k];
 
+
+
 				bool outOfBoundX = (x < 0) || (x >= width);
 				bool outOfBoundY = (y < 0) || (y >= height);
+				
+				//cnt used for normalization
 				if (!outOfBoundX && !outOfBoundY)
 				{
 					cnt += KERNEL[dx[k] + 1][dy[k] + 1];
@@ -180,12 +186,12 @@ void ImageManager::blur()
 }
 
 
-
+//create a new unqiue ptr and return the old one
 std::unique_ptr<sf::Image> ImageManager::getImage() const
 {
 	int width = m_image->getSize().x;
 	int height = m_image->getSize().y;
-	std::unique_ptr<sf::Image> imageCopy = std::make_unique<sf::Image>();
+	auto imageCopy = std::make_unique<sf::Image>();
 	imageCopy->create(width, height);
 	for (int i = 0; i < width; i++)
 		for (int j = 0; j < height; j++)
@@ -195,6 +201,7 @@ std::unique_ptr<sf::Image> ImageManager::getImage() const
 	return imageCopy;
 }
 
+//loads the image from the image object and scale it accordingly
 bool ImageManager::loadImage(sf::Image& image)
 {
 	if (image.getSize().x == 0 || image.getSize().y == 0)
@@ -203,7 +210,7 @@ bool ImageManager::loadImage(sf::Image& image)
 	m_texture.loadFromImage(*m_image);
 	m_sprite.setScale(m_scale, m_scale);
 	m_sprite.setTexture(m_texture);
-	updateScale();
+	m_updateScale();
 
 }
 
@@ -217,7 +224,7 @@ bool ImageManager::loadImage(std::unique_ptr<sf::Image> image)
 	m_sprite.setScale(m_scale, m_scale);
 	m_sprite.setTexture(m_texture);
 
-	updateScale();
+	m_updateScale();
 	return true;
 }
 
@@ -250,6 +257,6 @@ bool ImageManager::loadImage(const std::string& path)
 	m_sprite.setTexture(m_texture);
 	m_sprite.setScale(m_scale, m_scale);
 
-	updateScale();
+	m_updateScale();
 	return true;
 }

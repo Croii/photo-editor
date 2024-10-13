@@ -15,7 +15,7 @@ public:
 	void draw(sf::RenderTarget& target, sf::RenderStates state) const override;
 	void update(sf::Event& ev);
 
-	bool isHovered(const sf::Vector2f& mousePos);
+	bool isHovered(const sf::Vector2f& mousePos) const override;
 
 private:
 	sf::RectangleShape m_boundingBox;

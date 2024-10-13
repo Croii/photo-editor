@@ -28,7 +28,7 @@ public:
 	void draw();
 
 	void loadImage();
-	void saveImage();
+	void saveImage() const;
 	void rotate(Orientation orientation);
 	void grayScale();
 	void blur();
@@ -45,8 +45,8 @@ private:
 	CommandManager m_commandManager;
 
 	//design 
-	void initGUI();
-	void initVariables();
-	void initWindow();
+	void m_initGUI();
+	void m_initVariables();
+	void m_initWindow();
 };
 

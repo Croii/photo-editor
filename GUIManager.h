@@ -22,7 +22,7 @@ private:
 	static std::unordered_map<std::string, std::shared_ptr<sf::Texture>> S_ASSETS;
 	static std::vector<std::string > S_ASSETNAME;
 
-	int priority = 0;
+	int m_priority = 0;
 	using GUIElement_ptr = std::unique_ptr<GUIElement>;
 	std::unordered_map <int, GUIElement_ptr > m_guiElements;
 

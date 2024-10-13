@@ -5,7 +5,7 @@ std::unordered_map<std::string, std::shared_ptr<sf::Texture>> GUIManager::S_ASSE
 
 void GUIManager::addElement(std::unique_ptr<GUIElement>&& element)
 {
-	m_guiElements[priority++] = std::move(element);
+	m_guiElements[m_priority++] = std::move(element);
 }
 
 

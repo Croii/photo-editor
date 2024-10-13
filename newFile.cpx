@@ -1,0 +1,1081 @@
+#pragma once
+#include <filesystem>
+#include <iostream>
+#include <SFML/Graphics.hpp>
+#include <SFML/Window.hpp>
+#include <string>	
+
+
+#include "Bar.h"
+#include "Button.h"
+#include "Constants.h"
+#include "GUIManager.h"
+#include "ImageManager.h"
+#include "RotateImageCommand.h"
+#include "GrayscaleCommand.h"
+#include "BlurCommand.h"
+
+class Application
+{
+public:
+	Application();
+	~Application();
+
+	const bool running() const;
+
+	void pollEvents();
+	void update();
+	void draw();
+
+	void loadImage();
+	void saveImage() const;
+	void rotate(Orientation orientation);
+	void grayScale();
+	void blur();
+private:
+
+	std::unique_ptr<sf::RenderWindow> m_window;
+	sf::VideoMode m_videoMode;
+	sf::Event m_event;
+
+	const std::string M_TITLE;
+
+	GUIManager m_guiManager;
+	ImageManager m_imageManager;
+	CommandManager m_commandManager;
+
+	//design 
+	void m_initGUI();
+	void m_initVariables();
+	void m_initWindow();
+};
+
+#pragma once
+#include "GUIElement.h"
+#include "SFML/Graphics.hpp"
+
+#include <cstdint>
+
+
+
+class Bar : public GUIElement
+{
+public:
+	Bar(float pozX, float pozY, float width, float height, sf::Color color, bool isVisible = true);
+	~Bar() = default;
+
+
+	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+	void update(sf::Event& event) override;
+	bool isHovered(const sf::Vector2f& mousePos) const override;
+
+private:
+	sf::RectangleShape m_boundingBox;
+
+};#pragma once
+#include "ImageManager.h"
+#include "ICommand.h"
+
+class BlurCommand : public ICommand
+{
+public:
+	BlurCommand(ImageManager& imageManager, std::unique_ptr<sf::Image> image);
+	void execute() override;
+	void undo() override;
+
+private:
+	ImageManager& m_imageManager;
+	sf::Image m_oldImage;
+};
+
+#pragma once
+#include "GUIElement.h"
+#include "GUIManager.h"
+#include <functional>
+#include <iostream>
+
+class Button :
+	public GUIElement
+{
+public:
+	Button(float pozX, float pozY, float width, float height, sf::Color color, std::function<void()>, bool isVisible = true);
+	Button(float pozX, float pozY, float width, float height, std::string asset, std::function<void()>, bool isVisible = true);
+	~Button() = default;
+
+	void draw(sf::RenderTarget& target, sf::RenderStates state) const override;
+	void update(sf::Event& ev);
+
+	bool isHovered(const sf::Vector2f& mousePos) const override;
+
+private:
+	sf::RectangleShape m_boundingBox;
+	sf::Texture m_texture;
+	std::function<void()> m_onclick;
+};
+
+#pragma once
+#include "ICommand.h"
+#include <memory>
+#include <vector>
+
+class CommandManager
+{
+public:
+	void executeCommand(std::unique_ptr<ICommand> command);
+	void undo();
+	void redo();
+
+private:
+	std::vector<std::unique_ptr<ICommand>> m_undoStack;
+	std::vector<std::unique_ptr<ICommand>> m_redoStack;
+
+};
+
+#pragma once
+
+namespace constants
+{
+	const int WINDOW_WIDTH = 1920;
+	const int WINDOW_HEIGHT = 1080;
+
+	const int NAVIGATION_BAR_HEIGHT = 200;
+	const int NAVIGATION_BAR_WIDTH = WINDOW_WIDTH;
+
+	const int CANVAS_X = 0;
+	const int CANVAS_Y = NAVIGATION_BAR_HEIGHT;
+
+	const int CANVAS_WIDTH = WINDOW_WIDTH;
+	const int CANVAS_HEIGHT = WINDOW_HEIGHT - NAVIGATION_BAR_HEIGHT;
+}#pragma once
+#include <SFML/Graphics.hpp>
+
+
+class GUIElement : public sf::Drawable
+{
+public:
+	GUIElement(bool isVisible);
+	virtual ~GUIElement() = default;
+
+	//	virtual void render(sf::RenderTarget& target) = 0;
+	virtual void update(sf::Event& ev) = 0;
+	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override = 0;
+	virtual bool isHovered(const sf::Vector2f& mousePos) const = 0;
+
+
+	bool isVisible() const;
+
+protected:
+	bool m_visible;
+
+};
+
+#pragma once
+
+#include "GUIElement.h"
+#include <memory>
+#include <unordered_map>
+
+class GUIManager
+{
+public:
+	GUIManager() = default;
+	~GUIManager() = default;
+
+	void addElement(std::unique_ptr<GUIElement>&& element);
+
+	void drawAll(sf::RenderWindow& window);
+	void updateAll(sf::Event& event);
+
+	static void initializeAssests();
+	static std::shared_ptr<sf::Texture> getAsset(const std::string& name) noexcept;
+
+private:
+	static std::unordered_map<std::string, std::shared_ptr<sf::Texture>> S_ASSETS;
+	static std::vector<std::string > S_ASSETNAME;
+
+	int m_priority = 0;
+	using GUIElement_ptr = std::unique_ptr<GUIElement>;
+	std::unordered_map <int, GUIElement_ptr > m_guiElements;
+
+};
+
+#pragma once
+
+#include "ICommand.h"
+#include "ImageManager.h"
+
+
+class GrayscaleCommand : public ICommand
+{
+public:
+	GrayscaleCommand(ImageManager& imageManager, std::unique_ptr<sf::Image> image);
+	void execute() override;
+	void undo() override;
+
+private:
+	ImageManager& m_imageManager;
+	sf::Image m_oldImage;
+};
+
+#pragma once
+
+class ICommand
+{
+public:
+	virtual void execute() = 0;
+	virtual void undo() = 0;
+	virtual ~ICommand() = default;
+};#pragma once
+
+#include <SFML/Graphics.hpp>
+#include <memory>
+#include <iostream>
+
+class ImageLoader
+{
+public:
+	std::unique_ptr<sf::Image> loadImage(const std::string& path);
+	bool saveImage(const sf::Image& image, const std::string& path) const;
+
+private:
+};
+
+#pragma once
+#include "CommandManager.h"
+#include "Constants.h"
+#include "ImageLoader.h"
+
+#include "SFML/Graphics.hpp"
+#include "Utility.h"
+
+#include <cstdint>
+#include <iostream>
+#include <string>
+#include <array>
+//#include "RotateImageCommand.h"
+
+class RotateImageCommand;
+
+class ImageManager
+{
+public:
+	ImageManager();
+	~ImageManager() = default;
+	void draw(sf::RenderWindow& window, sf::RenderStates state) const;
+	void update(const sf::Event& event);
+
+	bool saveImage(const std::string& path) const;
+	bool loadImage(const std::string& path);
+	bool loadImage(sf::Image& image);
+	bool loadImage(std::unique_ptr<sf::Image> image);
+	void rotate(Orientation orientation);
+
+	
+	void rotateLeft();
+	void rotateRight();
+	void grayScale();
+	void blur();
+	std::unique_ptr<sf::Image> getImage() const;
+private:
+
+	void m_imageFitting();
+	void m_zoomUp();
+	void m_zoomDown();
+	void m_updateScale();
+
+	float m_scale;
+	std::unique_ptr <ImageLoader> m_imageLoader;
+	std::unique_ptr<sf::Image> m_image;
+	sf::Texture m_texture;
+	sf::Sprite m_sprite;
+
+
+
+};#pragma once
+#include "ICommand.h"
+#include "Utility.h"
+
+#include "ImageManager.h"
+
+
+class RotateImageCommand : public ICommand
+{
+public:
+	RotateImageCommand(ImageManager& imageManager, Orientation newOrientation);
+	void execute() override;
+	void undo() override;
+
+private:
+	ImageManager& m_imageManager;
+	Orientation m_newOrientation;
+	Orientation m_oldOrientation;
+
+};
+
+#pragma once
+#define NOMINMAX
+#include <windows.h>
+#include <shlobj.h>     // For SHBrowseForFolder
+#include <commdlg.h>    // For OPENFILENAME
+#include <string>
+
+enum class Orientation
+{
+	LEFT,
+	RIGHT
+};
+
+//std::string openFileDialog(const Operation operation);
+std::string openFile();
+std::string saveFile();//{{NO_DEPENDENCIES}}
+// Microsoft Visual C++ generated include file.
+// Used by photo editor.rc
+//
+#define IDR_TOOLBAR1                    101
+#define IDB_BITMAP1                     102
+
+// Next default values for new objects
+// 
+#ifdef APSTUDIO_INVOKED
+#ifndef APSTUDIO_READONLY_SYMBOLS
+#define _APS_NEXT_RESOURCE_VALUE        103
+#define _APS_NEXT_COMMAND_VALUE         40001
+#define _APS_NEXT_CONTROL_VALUE         1001
+#define _APS_NEXT_SYMED_VALUE           101
+#endif
+#endif
+#include "Application.h"
+
+
+Application::Application()
+	: M_TITLE("Photo Editor")
+{
+
+	GUIManager::initializeAssests();
+	m_initVariables();
+	m_initWindow();
+	m_initGUI();
+}
+
+Application::~Application()
+{
+
+}
+
+const bool Application::running() const
+{
+	return m_window->isOpen();
+}
+
+void Application::pollEvents()
+{
+
+	while (m_window->pollEvent(m_event))
+	{
+		switch (m_event.type)
+		{
+		case sf::Event::Closed:
+			m_window->close();
+			break;
+		case sf::Event::KeyPressed:
+			if (m_event.key.code == sf::Keyboard::Escape)
+				m_window->close();
+			else if (m_event.key.code == sf::Keyboard::Z)
+			{
+				m_commandManager.undo();
+			}
+			else if (m_event.key.code == sf::Keyboard::R)
+			{
+				m_commandManager.redo();
+			}
+			break;
+
+		}
+
+		m_guiManager.updateAll(m_event);
+		m_imageManager.update(m_event);
+		m_window->setFramerateLimit(60);
+	}
+
+}
+
+void Application::update()
+{
+	pollEvents();
+
+}
+
+void Application::draw()
+{
+	m_window->clear(sf::Color(41, 33, 89));
+	m_imageManager.draw(*m_window, sf::RenderStates::Default);
+	m_guiManager.drawAll(*m_window);
+	m_window->display();
+}
+
+
+void Application::m_initVariables()
+{
+	m_window = nullptr;
+}
+
+void Application::m_initWindow()
+{
+	m_videoMode = sf::VideoMode::getDesktopMode();
+	m_window = std::make_unique<sf::RenderWindow>(m_videoMode, M_TITLE, sf::Style::Fullscreen);
+}
+
+void Application::loadImage()
+{
+	std::string path = openFile();
+	if (path.empty())
+	{
+		std::cout << "No file selected";
+		return;
+	}
+
+	if (!m_imageManager.loadImage(path))
+	{
+		std::cout << "Error loading the file" << std::endl;
+		return;
+	}
+
+	std::cout << "File loaded successfully" << std::endl;
+
+
+}
+
+void Application::saveImage() const
+{
+	std::string path = saveFile();
+	if (path.empty())
+	{
+		std::cout << "No directory to save selected" << std::endl;
+		return;
+	}
+
+	if (!m_imageManager.saveImage(path))
+	{
+		std::cout << "Error saving the file" << std::endl;
+		return;
+	}
+	std::cout << "File save successfully" << std::endl;
+
+}
+
+void Application::rotate(Orientation orientation)
+{
+	std::unique_ptr <ICommand> command = std::make_unique<RotateImageCommand>(m_imageManager, orientation);
+
+	m_commandManager.executeCommand(std::move(command));
+	
+}
+
+void Application::grayScale()
+{
+	std::unique_ptr<ICommand> command = std::make_unique<GrayscaleCommand>(m_imageManager,m_imageManager.getImage());
+	m_commandManager.executeCommand(std::move(command));
+}
+
+void Application::blur()
+{
+	std::unique_ptr<ICommand> command = std::make_unique < BlurCommand>(m_imageManager, m_imageManager.getImage());
+	m_commandManager.executeCommand(std::move(command));
+}
+
+
+void Application::m_initGUI()
+{
+	//adding a top bar
+	auto topBar = std::make_unique<Bar>(0.0f, 0.0f, constants::NAVIGATION_BAR_WIDTH, constants::NAVIGATION_BAR_HEIGHT, sf::Color(28, 91, 161));
+	m_guiManager.addElement(std::move(topBar));
+
+	//adding a buttons
+
+	auto openFileButton = std::make_unique<Button>(50.0f, 50.0f, 100.0f, 100.0f, "selectFile", [this]() {
+		this->loadImage();
+		}, true);
+	m_guiManager.addElement(std::move(openFileButton));
+
+	auto saveFileButton = std::make_unique<Button>(200.0f, 50.0f, 100.0f, 100.0f, "saveFile", [this]() {
+		this->saveImage();
+		}, true);
+	m_guiManager.addElement(std::move(saveFileButton));
+
+	auto rotateLeftButton = std::make_unique<Button>(350.0f, 50.0f, 100.0f, 100.0f, "rotateLeft", [this]() {
+		this->rotate(Orientation::LEFT);
+		}, true);
+	m_guiManager.addElement(std::move(rotateLeftButton));
+
+	auto rotateRightButton = std::make_unique<Button>(500.0f, 50.0f, 100.0f, 100.0f, "rotateRight", [this]() {
+		this->rotate(Orientation::RIGHT);
+		}, true);
+	m_guiManager.addElement(std::move(rotateRightButton));
+
+	auto grayScaleButton = std::make_unique<Button>(650.0f, 50.0f, 100.0f, 100.0f, "grayScale", [this]() {
+		this->grayScale();
+		}, true);
+	m_guiManager.addElement(std::move(grayScaleButton));
+
+	auto blurButton = std::make_unique<Button>(800.0f, 50.0f, 100.0f, 100.0f, "blur", [this]() {
+		this->blur();
+		}, true);
+	m_guiManager.addElement(std::move(blurButton));
+}
+
+#include "Bar.h"
+
+Bar::Bar(float pozX, float pozY, float width, float height, sf::Color color, bool isVisible) : GUIElement(isVisible), m_boundingBox({ width,height })
+{
+	m_boundingBox.setPosition({ pozX,pozY });
+	m_boundingBox.setFillColor(color);
+
+}
+
+void Bar::draw(sf::RenderTarget& target, sf::RenderStates states) const 
+{
+	target.draw(m_boundingBox);
+}
+
+void Bar::update(sf::Event& ev)
+{
+}
+
+bool Bar::isHovered(const sf::Vector2f& mousePos) const
+{
+	return m_boundingBox.getGlobalBounds().contains(mousePos);
+}
+#include "BlurCommand.h"
+
+BlurCommand::BlurCommand(ImageManager& imageManager, std::unique_ptr<sf::Image> image) : m_imageManager(imageManager), m_oldImage(*image)
+{
+}
+
+void BlurCommand::execute()
+{
+	m_oldImage = *m_imageManager.getImage();
+	m_imageManager.blur();
+}
+
+void BlurCommand::undo()
+{
+	m_imageManager.loadImage(m_oldImage);
+}#include "Button.h"
+
+
+Button::Button(float pozX, float pozY, float width, float height, sf::Color color, std::function<void()> onclick, bool isVisible) : GUIElement(isVisible), m_boundingBox({ width,height }), m_onclick(onclick)
+{
+	m_boundingBox.setPosition({ pozX,pozY });
+	m_boundingBox.setFillColor(color);
+
+}
+
+Button::Button(float pozX, float pozY, float width, float height, std::string asset, std::function<void()> onclick, bool isVisible) : GUIElement(isVisible), m_boundingBox({ width,height }), m_onclick(onclick)
+{
+	m_boundingBox.setPosition({ pozX,pozY });
+	const auto texture = GUIManager::getAsset(asset);
+	m_boundingBox.setTexture(&(*texture));
+	std::cout << m_boundingBox.getTexture()->getSize().x << " " << m_boundingBox.getTexture()->getSize().y << std::endl;
+}
+
+void Button::draw(sf::RenderTarget& target, sf::RenderStates state) const
+{
+	target.draw(m_boundingBox);
+}
+
+void Button::update(sf::Event& ev)
+{
+	if (ev.type == sf::Event::MouseButtonReleased)
+	{
+
+		if (isHovered({ static_cast<float>(ev.mouseButton.x), static_cast<float>(ev.mouseButton.y) }))
+		{
+			m_onclick();
+		}
+	}
+}
+
+bool Button::isHovered(const sf::Vector2f& mousePos) const
+{
+
+	return m_boundingBox.getGlobalBounds().contains(mousePos);
+}
+
+
+#include "CommandManager.h"
+
+void CommandManager::executeCommand(std::unique_ptr<ICommand> command)
+{
+	command->execute();
+	m_undoStack.push_back(std::move(command));
+	m_redoStack.clear();
+}
+
+void CommandManager::undo()
+{
+	if (m_undoStack.empty())
+		return;
+	auto command = std::move(m_undoStack.back());
+	m_undoStack.pop_back();
+
+	command->undo();
+	m_redoStack.push_back(std::move(command));
+	command = nullptr;
+}
+
+#include <iostream>
+void CommandManager::redo()
+{
+	if (m_redoStack.empty())
+		return;
+
+	auto command = std::move(m_redoStack.back());
+	m_redoStack.pop_back();
+	command->execute();
+	m_undoStack.push_back(std::move(command));
+	command = nullptr;
+	std::cout << "executed redo";
+}
+#include "GUIElement.h"
+
+
+
+GUIElement::GUIElement(bool visible) : m_visible(visible)
+{
+}
+
+
+
+bool GUIElement::isVisible() const
+{
+	return m_visible;
+}
+#include "GUIManager.h"
+
+std::vector<std::string > GUIManager::S_ASSETNAME = { "saveFile", "selectFile", "rotateLeft", "rotateRight", "grayScale", "blur"};
+std::unordered_map<std::string, std::shared_ptr<sf::Texture>> GUIManager::S_ASSETS;
+
+void GUIManager::addElement(std::unique_ptr<GUIElement>&& element)
+{
+	m_guiElements[m_priority++] = std::move(element);
+}
+
+
+
+void GUIManager::drawAll(sf::RenderWindow& window)
+{
+	for (auto& [_, element] : m_guiElements)
+	{
+		if (element->isVisible())
+		{
+			element->draw(window, sf::RenderStates::Default);
+		}
+	}
+}
+
+void GUIManager::updateAll(sf::Event& ev)
+{
+	for (auto& [_, element] : m_guiElements)
+	{
+		element->update(ev);
+	}
+}
+
+
+void GUIManager::initializeAssests()
+{
+	for (auto& name : S_ASSETNAME)
+	{
+		auto texture = std::make_shared<sf::Texture>();
+		if (texture->loadFromFile("Assets\\" + name + ".png")) {
+			//here is the good texture
+			S_ASSETS.insert({ name ,texture });
+		}
+	}
+
+}
+
+std::shared_ptr<sf::Texture> GUIManager::getAsset(const std::string& name) noexcept
+{
+	return S_ASSETS[name];
+}
+#include "GrayscaleCommand.h"
+
+GrayscaleCommand::GrayscaleCommand(ImageManager& imageManager, std::unique_ptr<sf::Image> image) : m_imageManager(imageManager),m_oldImage(*image)
+{
+	
+}
+
+void GrayscaleCommand::execute()
+{
+
+	m_imageManager.grayScale();
+}
+
+void GrayscaleCommand::undo()
+{
+	m_imageManager.loadImage(m_oldImage);
+}
+#include "ImageLoader.h"
+
+std::unique_ptr<sf::Image> ImageLoader::loadImage(const std::string& path)
+{
+	std::unique_ptr<sf::Image> image = std::make_unique<sf::Image>();
+	if (!image->loadFromFile(path)) {
+
+		return nullptr;
+	}
+	return image;
+}
+
+bool ImageLoader::saveImage(const sf::Image& image, const std::string& path) const
+{
+	return image.saveToFile(path + "\\image.png");
+}
+#include "ImageManager.h"
+#include "RotateImageCommand.h"
+
+ImageManager::ImageManager() : m_imageLoader(std::unique_ptr<ImageLoader>()), m_scale(1.0f)
+{
+
+}
+
+void ImageManager::draw(sf::RenderWindow& window, sf::RenderStates) const
+{
+	window.draw(m_sprite);
+}
+
+void ImageManager::update(const sf::Event& event)
+{
+	switch (event.type)
+	{
+	case sf::Event::KeyPressed:
+		if (event.key.code == sf::Keyboard::A)
+			m_zoomDown();
+		else if (event.key.code == sf::Keyboard::B)
+			m_zoomUp();
+
+	}
+
+}
+
+bool ImageManager::saveImage(const std::string& path) const
+{
+	if (m_image == nullptr || m_image->getSize().x == 0 || m_image->getSize().y == 0 || path.size() == 0)
+	{
+		std::cout << "No image to save" << std::endl;
+		return 0;
+	}
+	return m_imageLoader->saveImage(m_sprite.getTexture()->copyToImage(), path);
+
+	//return m_imageLoader->saveImage(*m_image, path);
+}
+
+void ImageManager::m_imageFitting()
+{
+}
+
+void ImageManager::m_zoomUp()
+{
+	m_scale = m_scale * 1.1f;
+	m_updateScale();
+}
+
+void ImageManager::m_zoomDown()
+{
+	m_scale = m_scale * 0.9f;
+	m_updateScale();
+}
+
+void ImageManager::m_updateScale()
+{
+	if (m_texture.getSize().x > constants::CANVAS_HEIGHT || m_texture.getSize().y > constants::CANVAS_WIDTH)
+	{
+		m_scale = std::min(static_cast<float>(constants::CANVAS_HEIGHT) / m_texture.getSize().y,
+			static_cast<float>(constants::CANVAS_WIDTH) / m_texture.getSize().x);
+	}
+
+	m_sprite.setScale(m_scale, m_scale);
+	m_sprite.setPosition(0.0f + constants::CANVAS_X + constants::CANVAS_WIDTH / 2 - m_texture.getSize().x / 2 * m_scale,
+		0.0f + constants::CANVAS_Y + constants::CANVAS_HEIGHT / 2 - m_texture.getSize().y / 2 * m_scale);
+}
+
+void ImageManager::rotateLeft()
+{
+	int oldWidth = m_image->getSize().x;
+	int oldHeight = m_image->getSize().y;
+	std::unique_ptr<sf::Image> newImage = std::make_unique<sf::Image>();
+	newImage->create(oldHeight, oldWidth);
+
+	for (int y = 0; y < oldHeight; y++)
+		for (int x = 0; x < oldWidth; x++)
+		{
+			newImage->setPixel(y, (oldWidth - x - 1), m_image->getPixel(x, y));
+		}
+	m_image.swap(newImage);
+	m_texture.loadFromImage(*m_image);
+	m_sprite.setTexture(m_texture, true);
+	newImage = nullptr;
+	m_updateScale();
+
+}
+
+void ImageManager::rotateRight()
+{
+	int oldWidth = m_image->getSize().x;
+	int oldHeight = m_image->getSize().y;
+	std::unique_ptr<sf::Image> newImage = std::make_unique<sf::Image>();
+	newImage->create(oldHeight, oldWidth);
+
+	for (int y = 0; y < oldHeight; y++)
+		for (int x = 0; x < oldWidth; x++)
+		{
+			newImage->setPixel((oldHeight - y - 1), x, m_image->getPixel(x, y));
+		}
+	m_image.swap(newImage);
+	m_texture.loadFromImage(*m_image);
+	m_sprite.setTexture(m_texture, true);
+	newImage = nullptr;
+	m_updateScale();
+
+}
+
+void ImageManager::grayScale()
+{
+	int width = m_image->getSize().x;
+	int height = m_image->getSize().y;
+
+	for (int i = 0; i < width; i++)
+		for (int j = 0; j < height; j++)
+		{
+			int red = m_image->getPixel(i, j).r;
+			int green = m_image->getPixel(i, j).g;
+			int blue = m_image->getPixel(i, j).b;
+
+			red = static_cast<int>(red * 0.299);
+			green = static_cast<int>(green * 0.299);
+			blue = static_cast<int>(blue * 0.299);
+			int gray = std::min(blue + red + blue, 255);
+			m_image->setPixel(i, j, sf::Color(gray, gray, gray));
+		}
+	m_texture.loadFromImage(*m_image);
+	m_sprite.setTexture(m_texture);
+}
+
+//blur
+void ImageManager::blur()
+{
+	int width = m_image->getSize().x;
+	int height = m_image->getSize().y;
+
+	sf::Image newImage;
+	newImage.create(width, height);
+
+	const int DIRECTIONS = 9;
+	const int KERNELSIZE = 3;
+
+	const std::array<std::array<int, KERNELSIZE>, KERNELSIZE> KERNEL = { { {1,2,1},{2,4,2},{1,2,1} } };
+	const std::array<int, DIRECTIONS> dx = { 0, 0, 0, 1, 1, 1, -1, -1, -1 };
+	const std::array<int, DIRECTIONS> dy = { 0, -1, 1, 1, 0, -1, 1, 0, -1 };
+
+
+	for (int i = 0; i < width; i++)
+		for (int j = 0; j < height; j++)
+		{
+			unsigned int newR = 0;
+			unsigned int newG = 0;
+			unsigned int newB = 0;
+
+			int cnt = 0;
+			for (int k = 0; k < DIRECTIONS; k++)
+			{
+				int x = i + dx[k];
+				int y = j + dy[k];
+
+				bool outOfBoundX = (x < 0) || (x >= width);
+				bool outOfBoundY = (y < 0) || (y >= height);
+				if (!outOfBoundX && !outOfBoundY)
+				{
+					cnt += KERNEL[dx[k] + 1][dy[k] + 1];
+					newR += m_image->getPixel(x, y).r * KERNEL[dx[k] + 1][dy[k] + 1];
+					newG += m_image->getPixel(x, y).g * KERNEL[dx[k] + 1][dy[k] + 1];
+					newB += m_image->getPixel(x, y).b * KERNEL[dx[k] + 1][dy[k] + 1];
+				}
+
+			}
+			newR /= cnt;
+			newG /= cnt;
+			newB /= cnt;
+			newImage.setPixel(i, j, sf::Color(newR, newG, newB));
+		}
+	m_image = std::make_unique<sf::Image>(newImage);
+	m_texture.loadFromImage(*m_image);
+	m_sprite.setTexture(m_texture);
+}
+
+
+
+std::unique_ptr<sf::Image> ImageManager::getImage() const
+{
+	int width = m_image->getSize().x;
+	int height = m_image->getSize().y;
+	std::unique_ptr<sf::Image> imageCopy = std::make_unique<sf::Image>();
+	imageCopy->create(width, height);
+	for (int i = 0; i < width; i++)
+		for (int j = 0; j < height; j++)
+		{
+			imageCopy->setPixel(i, j, m_image->getPixel(i, j));
+		}
+	return imageCopy;
+}
+
+bool ImageManager::loadImage(sf::Image& image)
+{
+	if (image.getSize().x == 0 || image.getSize().y == 0)
+		return 0;
+	m_image = std::make_unique<sf::Image>(image);
+	m_texture.loadFromImage(*m_image);
+	m_sprite.setScale(m_scale, m_scale);
+	m_sprite.setTexture(m_texture);
+	m_updateScale();
+
+}
+
+bool ImageManager::loadImage(std::unique_ptr<sf::Image> image)
+{
+	if (image == nullptr)
+		return false;
+	m_image = nullptr;
+	m_image = std::move(image);
+	m_texture.loadFromImage(*m_image);
+	m_sprite.setScale(m_scale, m_scale);
+	m_sprite.setTexture(m_texture);
+
+	m_updateScale();
+	return true;
+}
+
+void ImageManager::rotate(Orientation orientation)
+{
+	if (orientation == Orientation::LEFT)
+		rotateLeft();
+	else if (orientation == Orientation::RIGHT)
+		rotateRight();
+}
+
+bool ImageManager::loadImage(const std::string& path)
+{
+
+	auto loadedImage = m_imageLoader->loadImage(path);
+	if (loadedImage == nullptr)
+	{
+		return false;
+	}
+
+	m_scale = 1.0f;
+
+
+	//reinitialization prevents visual glitch
+	m_image = std::make_unique<sf::Image>();
+	m_image = std::move(loadedImage);
+	m_texture = sf::Texture();
+	m_texture.loadFromImage(*m_image);
+	m_sprite = sf::Sprite();
+	m_sprite.setTexture(m_texture);
+	m_sprite.setScale(m_scale, m_scale);
+
+	m_updateScale();
+	return true;
+}#include "RotateImageCommand.h"
+#include "ImageManager.h"
+
+RotateImageCommand::RotateImageCommand(ImageManager& imageManager, Orientation newOrientation) : m_imageManager(imageManager), m_newOrientation(newOrientation)
+{
+}
+
+void RotateImageCommand::execute()
+{
+	m_oldOrientation = m_newOrientation;
+	if (m_newOrientation == Orientation::LEFT)
+		m_imageManager.rotateLeft();
+	else
+		m_imageManager.rotateRight();
+}
+
+void RotateImageCommand::undo()
+{
+	if (m_oldOrientation == Orientation::LEFT)
+		m_imageManager.rotateRight();
+	else if (m_oldOrientation == Orientation::RIGHT)
+		m_imageManager.rotateLeft();
+}
+#include "Application.h"
+
+#include <iostream>
+#include <string>
+
+int main()
+{
+
+	Application engine;
+	while (engine.running())
+	{
+		//Event handling
+		engine.update();
+		engine.draw();
+	}
+	return 0;
+}#include "Utility.h"
+
+std::string openFile()
+{
+	char szFile[260] = { 0 };
+	HWND hwnd = NULL;  // Owner window (can be NULL)
+	// Use the common file open dialog for file selection (ANSI version)
+	const char* filter = "Image Files\0*.jpg;*.jpeg;*.png;*.bmp;*.gif;*.tiff\0";
+
+	OPENFILENAMEA ofn;  // Common dialog box structure (A for ANSI version)
+
+	// Initialize OPENFILENAME
+	ZeroMemory(&ofn, sizeof(ofn));
+	ofn.lStructSize = sizeof(ofn);
+	ofn.hwndOwner = hwnd;
+	ofn.lpstrFile = szFile;
+	ofn.lpstrFile[0] = '\0';  // Initialize buffer to empty string
+	ofn.nMaxFile = sizeof(szFile);
+	ofn.lpstrFilter = filter;
+	ofn.nFilterIndex = 1;
+	ofn.lpstrFileTitle = NULL;
+	ofn.nMaxFileTitle = 0;
+	ofn.lpstrInitialDir = NULL;
+	ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;
+
+	// Display the Open dialog box for file selection
+	if (GetOpenFileNameA(&ofn) == TRUE) {
+		return std::string(ofn.lpstrFile);  // Return the selected file path
+	}
+	return std::string();
+}
+
+std::string saveFile()
+{
+	char szFile[260] = { 0 };
+	BROWSEINFOA bi = { 0 };
+	bi.lpszTitle = "Select Folder";
+	bi.ulFlags = BIF_RETURNONLYFSDIRS | BIF_NEWDIALOGSTYLE;  // Only show file system directories
+
+	// Display the folder selection dialog (ANSI version)
+	LPITEMIDLIST pidl = SHBrowseForFolderA(&bi);
+
+	if (pidl != NULL) {
+		// Get the folder path from the item ID list (ANSI version)
+		SHGetPathFromIDListA(pidl, szFile);
+		IMalloc* imalloc = 0;
+		if (SUCCEEDED(SHGetMalloc(&imalloc))) {
+			imalloc->Free(pidl);  // Free memory
+			imalloc->Release();
+		}
+		return std::string(szFile);  // Return the selected folder path
+	}
+	return std::string();
+}
