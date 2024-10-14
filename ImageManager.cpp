@@ -13,14 +13,14 @@ void ImageManager::draw(sf::RenderWindow& window, sf::RenderStates) const
 
 void ImageManager::update(const sf::Event& event)
 {
-	switch (event.type)
-	{
-	case sf::Event::KeyPressed:
-		if (event.key.code == sf::Keyboard::A)
-			m_zoomDown();
-		else if (event.key.code == sf::Keyboard::B)
-			m_zoomUp();
-	}
+	//switch (event.type)
+	//{
+	//case sf::Event::KeyPressed:
+	//	if (event.key.code == sf::Keyboard::A)
+	//		m_zoomDown();
+	//	else if (event.key.code == sf::Keyboard::B)
+	//		m_zoomUp();
+	//}
 }
 
 bool ImageManager::saveImage(const std::string& path) const
@@ -36,13 +36,13 @@ bool ImageManager::saveImage(const std::string& path) const
 }
 
 
-void ImageManager::m_zoomUp()
+void ImageManager::zoomIn()
 {
 	m_scale = m_scale * 1.1f;
 	m_updateScale();
 }
 
-void ImageManager::m_zoomDown()
+void ImageManager::zoomOut()
 {
 	m_scale = m_scale * 0.9f;
 	m_updateScale();
@@ -189,6 +189,9 @@ void ImageManager::blur()
 //create a new unqiue ptr and return the old one
 std::unique_ptr<sf::Image> ImageManager::getImage() const
 {
+	if (m_image == nullptr)
+		return nullptr;
+
 	int width = m_image->getSize().x;
 	int height = m_image->getSize().y;
 	auto imageCopy = std::make_unique<sf::Image>();

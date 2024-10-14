@@ -34,14 +34,6 @@ void Application::pollEvents()
 		case sf::Event::KeyPressed:
 			if (m_event.key.code == sf::Keyboard::Escape)
 				m_window->close();
-			else if (m_event.key.code == sf::Keyboard::Z)
-			{
-				m_commandManager.undo();
-			}
-			else if (m_event.key.code == sf::Keyboard::R)
-			{
-				m_commandManager.redo();
-			}
 			break;
 
 		}
@@ -101,6 +93,11 @@ void Application::loadImage()
 
 void Application::saveImage() const
 {
+	if (m_imageManager.getImage() == nullptr)
+	{
+		std::cout << "No image to save" << std::endl;
+		return;
+	}
 	std::string path = saveFile();
 	if (path.empty())
 	{
@@ -119,61 +116,95 @@ void Application::saveImage() const
 
 void Application::rotate(Orientation orientation)
 {
+	if (m_imageManager.getImage() == nullptr)
+	{
+		std::cout << "No image to modify" << std::endl;
+		return;
+	}
 	std::unique_ptr <ICommand> command = std::make_unique<RotateImageCommand>(m_imageManager, orientation);
 
 	m_commandManager.executeCommand(std::move(command));
-	
+
 }
 
 void Application::grayScale()
 {
-	std::unique_ptr<ICommand> command = std::make_unique<GrayscaleCommand>(m_imageManager,m_imageManager.getImage());
+	if (m_imageManager.getImage() == nullptr)
+	{
+		std::cout << "No image to modify" << std::endl;
+		return;
+	}
+	std::unique_ptr<ICommand> command = std::make_unique<GrayscaleCommand>(m_imageManager, m_imageManager.getImage());
 	m_commandManager.executeCommand(std::move(command));
 }
 
 void Application::blur()
 {
+	if (m_imageManager.getImage() == nullptr)
+	{
+		std::cout << "No image to modify" << std::endl;
+		return;
+	}
 	std::unique_ptr<ICommand> command = std::make_unique < BlurCommand>(m_imageManager, m_imageManager.getImage());
 	m_commandManager.executeCommand(std::move(command));
+}
+
+void Application::addButton(const std::string& text, const std::function<void()>& onClick, const sf::Vector2f& position, const sf::Vector2f& size)
+{
+
+	auto button = std::make_unique<Button>(position.x, position.y, size.x, size.y, text, onClick, true);
+	m_guiManager.addElement(std::move(button));
+}
+
+void Application::addBar(sf::Color color, const std::function<void(float)>& onValueChanged, const sf::Vector2f& position, const sf::Vector2f& size)
+{
+	auto bar = std::make_unique<Bar>(position.x, position.y, size.x, size.y, color);
+	m_guiManager.addElement(std::move(bar));
 }
 
 
 void Application::m_initGUI()
 {
-	//adding a top bar
-	auto topBar = std::make_unique<Bar>(0.0f, 0.0f, constants::NAVIGATION_BAR_WIDTH, constants::NAVIGATION_BAR_HEIGHT, sf::Color(28, 91, 161));
-	m_guiManager.addElement(std::move(topBar));
+	addBar(sf::Color(28, 91, 161), [](float) {}, sf::Vector2f(0.0f, 0.0f), sf::Vector2f(constants::NAVIGATION_BAR_WIDTH, constants::NAVIGATION_BAR_HEIGHT));
 
-	//adding a buttons
-
-	auto openFileButton = std::make_unique<Button>(50.0f, 50.0f, 100.0f, 100.0f, "selectFile", [this]() {
+	addButton("selectFile", [this]() {
 		this->loadImage();
-		}, true);
-	m_guiManager.addElement(std::move(openFileButton));
+		}, sf::Vector2f(50.0f, 50.0f), sf::Vector2f(100.0f, 100.0f));
 
-	auto saveFileButton = std::make_unique<Button>(200.0f, 50.0f, 100.0f, 100.0f, "saveFile", [this]() {
+	addButton("saveFile", [this]() {
 		this->saveImage();
-		}, true);
-	m_guiManager.addElement(std::move(saveFileButton));
+		}, sf::Vector2f(200.0f, 50.0f), sf::Vector2f(100.0f, 100.0f));
 
-	auto rotateLeftButton = std::make_unique<Button>(350.0f, 50.0f, 100.0f, 100.0f, "rotateLeft", [this]() {
+	addButton("rotateLeft", [this]() {
 		this->rotate(Orientation::LEFT);
-		}, true);
-	m_guiManager.addElement(std::move(rotateLeftButton));
+		}, sf::Vector2f(350.0f, 50.0f), sf::Vector2f(100.0f, 100.0f));
 
-	auto rotateRightButton = std::make_unique<Button>(500.0f, 50.0f, 100.0f, 100.0f, "rotateRight", [this]() {
+	addButton("rotateRight", [this]() {
 		this->rotate(Orientation::RIGHT);
-		}, true);
-	m_guiManager.addElement(std::move(rotateRightButton));
+		}, sf::Vector2f(500.0f, 50.0f), sf::Vector2f(100.0f, 100.0f));
 
-	auto grayScaleButton = std::make_unique<Button>(650.0f, 50.0f, 100.0f, 100.0f, "grayScale", [this]() {
+	addButton("grayScale", [this]() {
 		this->grayScale();
-		}, true);
-	m_guiManager.addElement(std::move(grayScaleButton));
+		}, sf::Vector2f(650.0f, 50.0f), sf::Vector2f(100.0f, 100.0f));
 
-	auto blurButton = std::make_unique<Button>(800.0f, 50.0f, 100.0f, 100.0f, "blur", [this]() {
+	addButton("blur", [this]() {
 		this->blur();
-		}, true);
-	m_guiManager.addElement(std::move(blurButton));
-}
+		}, sf::Vector2f(800.0f, 50.0f), sf::Vector2f(100.0f, 100.0f));
 
+	addButton("undo", [this]() {
+		this->m_commandManager.undo();
+		}, sf::Vector2f(950.0f, 50.0f), sf::Vector2f(100.0f, 100.0f));
+
+	addButton("redo", [this]() {
+		this->m_commandManager.redo();
+		}, sf::Vector2f(1100.0f, 50.0f), sf::Vector2f(100.0f, 100.0f));
+
+	addButton("zoomIn", [this]() {
+		this->m_imageManager.zoomIn();
+		}, sf::Vector2f(1250.0f, 50.0f), sf::Vector2f(100.0f, 100.0f));
+
+	addButton("zoomOut", [this]() {
+		this->m_imageManager.zoomOut();
+		}, sf::Vector2f(1400.0f, 50.0f), sf::Vector2f(100.0f, 100.0f));
+
+}

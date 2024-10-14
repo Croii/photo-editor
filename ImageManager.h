@@ -33,11 +33,11 @@ public:
 	void rotateRight();
 	void grayScale();
 	void blur();
+	void zoomIn();
+	void zoomOut();
 	std::unique_ptr<sf::Image> getImage() const;
 private:
 
-	void m_zoomUp();
-	void m_zoomDown();
 	void m_updateScale();
 
 	float m_scale;

@@ -32,8 +32,12 @@ public:
 	void rotate(Orientation orientation);
 	void grayScale();
 	void blur();
-private:
 
+private:
+	void addButton(const std::string& text, const std::function<void()>& onClick, const sf::Vector2f& position, const sf::Vector2f& size);
+	void addBar(sf::Color color, const std::function<void(float)>& onValueChanged, const sf::Vector2f& position, const sf::Vector2f& size);
+	
+	
 	std::unique_ptr<sf::RenderWindow> m_window;
 	sf::VideoMode m_videoMode;
 	sf::Event m_event;
@@ -49,4 +53,3 @@ private:
 	void m_initVariables();
 	void m_initWindow();
 };
-
