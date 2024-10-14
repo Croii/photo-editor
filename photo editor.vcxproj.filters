@@ -1,98 +1,114 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    <ClInclude Include="include\resource.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Application.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Constants.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\GUIManager.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ImageLoader.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ImageManager.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Utility.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Command\BlurCommand.h">
+      <Filter>headers\commands</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CommandManager.h">
+      <Filter>headers\commands</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Command\GrayscaleCommand.h">
+      <Filter>headers\commands</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Command\RotateImageCommand.h">
+      <Filter>headers\commands</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Command\ICommand.h">
+      <Filter>headers\commands</Filter>
+    </ClInclude>
+    <ClInclude Include="include\GUI\Bar.h">
+      <Filter>headers\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="include\GUI\Button.h">
+      <Filter>headers\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="include\GUI\GUIElement.h">
+      <Filter>headers\gui</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="headers">
+      <UniqueIdentifier>{619005d2-836c-4add-91d6-115836f1c02c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    <Filter Include="headers\commands">
+      <UniqueIdentifier>{93f1e37f-65db-4216-9771-47282b1d8e04}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="headers\gui">
+      <UniqueIdentifier>{d073f96b-4c2e-4f09-895b-74b3f8472aa8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{be1ea898-7cd2-4e36-94fc-c7c8cf3d90d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\gui">
+      <UniqueIdentifier>{577ee9e2-1865-4be9-a0ff-c5cc008eb2e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\commands">
+      <UniqueIdentifier>{ecf9cd37-05d8-47e8-af8d-4edc351f1d51}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\GUI\Bar.cpp">
+      <Filter>src\gui</Filter>
     </ClCompile>
-    <ClCompile Include="Application.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\GUI\Button.cpp">
+      <Filter>src\gui</Filter>
     </ClCompile>
-    <ClCompile Include="GUIElement.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\GUI\GUIElement.cpp">
+      <Filter>src\gui</Filter>
     </ClCompile>
-    <ClCompile Include="Bar.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\Command\BlurCommand.cpp">
+      <Filter>src\commands</Filter>
     </ClCompile>
-    <ClCompile Include="GUIManager.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\Command\GrayscaleCommand.cpp">
+      <Filter>src\commands</Filter>
     </ClCompile>
-    <ClCompile Include="Button.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\Command\ICommand.cpp">
+      <Filter>src\commands</Filter>
     </ClCompile>
-    <ClCompile Include="ImageManager.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\Command\RotateImageCommand.cpp">
+      <Filter>src\commands</Filter>
     </ClCompile>
-    <ClCompile Include="Utility.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\Application.cpp">
+      <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="ImageLoader.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\CommandManager.cpp">
+      <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="RotateImageCommand.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\GUIManager.cpp">
+      <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="CommandManager.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\ImageLoader.cpp">
+      <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="GrayscaleCommand.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\ImageManager.cpp">
+      <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="BlurCommand.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\Source.cpp">
+      <Filter>src</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Application.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GUIElement.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Bar.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GUIManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Button.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ImageManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Constants.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Utility.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ICommand.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ImageLoader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="RotateImageCommand.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CommandManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GrayscaleCommand.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BlurCommand.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
+    <ClCompile Include="src\Utility.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

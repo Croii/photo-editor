@@ -1,5 +1,5 @@
-#include "RotateImageCommand.h"
-#include "ImageManager.h"
+#include "../../include/Command/RotateImageCommand.h"
+#include "../../include/ImageManager.h"
 
 RotateImageCommand::RotateImageCommand(ImageManager& imageManager, Orientation newOrientation) : m_imageManager(imageManager), m_newOrientation(newOrientation)
 {

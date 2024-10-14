@@ -1,4 +1,6 @@
-#include "BlurCommand.h"
+#include "../../include/Command/BlurCommand.h"
+
+
 
 BlurCommand::BlurCommand(ImageManager& imageManager, std::unique_ptr<sf::Image> image) : m_imageManager(imageManager), m_oldImage(*image)
 {

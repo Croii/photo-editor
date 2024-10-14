@@ -1,4 +1,5 @@
-#include "ImageLoader.h"
+#include "../../include/ImageLoader.h"
+
 
 std::unique_ptr<sf::Image> ImageLoader::loadImage(const std::string& path)
 {

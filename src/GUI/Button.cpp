@@ -1,5 +1,4 @@
-#include "Button.h"
-
+#include "../../include/GUI/Button.h"
 
 Button::Button(float pozX, float pozY, float width, float height, sf::Color color, std::function<void()> onclick, bool isVisible) : GUIElement(isVisible), m_boundingBox({ width,height }), m_onclick(onclick)
 {

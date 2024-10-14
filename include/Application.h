@@ -6,14 +6,15 @@
 #include <string>	
 
 
-#include "Bar.h"
-#include "Button.h"
+//#include "Bar.h"
+#include "../include/GUI/Bar.h"
+#include "../include/GUI/Button.h"
 #include "Constants.h"
 #include "GUIManager.h"
 #include "ImageManager.h"
-#include "RotateImageCommand.h"
-#include "GrayscaleCommand.h"
-#include "BlurCommand.h"
+#include "../include/Command/RotateImageCommand.h"
+#include "../include/Command/GrayscaleCommand.h"
+#include "../include/Command/BlurCommand.h"
 
 class Application
 {

@@ -1,4 +1,6 @@
-#include "CommandManager.h"
+#include "../../include/CommandManager.h"
+
+
 
 void CommandManager::executeCommand(std::unique_ptr<ICommand> command)
 {

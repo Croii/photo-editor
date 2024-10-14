@@ -1,6 +1,6 @@
 #pragma once
 
-#include "GUIElement.h"
+#include "../include/GUI/GUIElement.h"
 #include <memory>
 #include <unordered_map>
 

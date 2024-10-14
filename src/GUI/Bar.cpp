@@ -1,5 +1,4 @@
-#include "Bar.h"
-
+#include "../../include/GUI/Bar.h"
 Bar::Bar(float pozX, float pozY, float width, float height, sf::Color color, bool isVisible) : GUIElement(isVisible), m_boundingBox({ width,height })
 {
 	m_boundingBox.setPosition({ pozX,pozY });

@@ -18,6 +18,39 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\Application.h" />
+    <ClInclude Include="include\CommandManager.h" />
+    <ClInclude Include="include\Command\BlurCommand.h" />
+    <ClInclude Include="include\Command\GrayscaleCommand.h" />
+    <ClInclude Include="include\Command\ICommand.h" />
+    <ClInclude Include="include\Command\RotateImageCommand.h" />
+    <ClInclude Include="include\Constants.h" />
+    <ClInclude Include="include\GUIManager.h" />
+    <ClInclude Include="include\GUI\Bar.h" />
+    <ClInclude Include="include\GUI\Button.h" />
+    <ClInclude Include="include\GUI\GUIElement.h" />
+    <ClInclude Include="include\ImageLoader.h" />
+    <ClInclude Include="include\ImageManager.h" />
+    <ClInclude Include="include\resource.h" />
+    <ClInclude Include="include\Utility.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\Application.cpp" />
+    <ClCompile Include="src\CommandManager.cpp" />
+    <ClCompile Include="src\Command\BlurCommand.cpp" />
+    <ClCompile Include="src\Command\GrayscaleCommand.cpp" />
+    <ClCompile Include="src\Command\ICommand.cpp" />
+    <ClCompile Include="src\Command\RotateImageCommand.cpp" />
+    <ClCompile Include="src\GUIManager.cpp" />
+    <ClCompile Include="src\GUI\Bar.cpp" />
+    <ClCompile Include="src\GUI\Button.cpp" />
+    <ClCompile Include="src\GUI\GUIElement.cpp" />
+    <ClCompile Include="src\ImageLoader.cpp" />
+    <ClCompile Include="src\ImageManager.cpp" />
+    <ClCompile Include="src\Source.cpp" />
+    <ClCompile Include="src\Utility.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
@@ -133,37 +166,6 @@
       <AdditionalDependencies>sfml-graphics.lib;sfml-window.lib;sfml-audio.lib;sfml-network.lib;sfml-system.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="Application.cpp" />
-    <ClCompile Include="Bar.cpp" />
-    <ClCompile Include="BlurCommand.cpp" />
-    <ClCompile Include="GrayscaleCommand.cpp" />
-    <ClCompile Include="Button.cpp" />
-    <ClCompile Include="CommandManager.cpp" />
-    <ClCompile Include="GUIElement.cpp" />
-    <ClCompile Include="GUIManager.cpp" />
-    <ClCompile Include="ImageLoader.cpp" />
-    <ClCompile Include="ImageManager.cpp" />
-    <ClCompile Include="RotateImageCommand.cpp" />
-    <ClCompile Include="Source.cpp" />
-    <ClCompile Include="Utility.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Application.h" />
-    <ClInclude Include="Bar.h" />
-    <ClInclude Include="BlurCommand.h" />
-    <ClInclude Include="GrayscaleCommand.h" />
-    <ClInclude Include="Button.h" />
-    <ClInclude Include="CommandManager.h" />
-    <ClInclude Include="Constants.h" />
-    <ClInclude Include="GUIElement.h" />
-    <ClInclude Include="GUIManager.h" />
-    <ClInclude Include="ICommand.h" />
-    <ClInclude Include="ImageLoader.h" />
-    <ClInclude Include="ImageManager.h" />
-    <ClInclude Include="RotateImageCommand.h" />
-    <ClInclude Include="Utility.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

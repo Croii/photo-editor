@@ -1,6 +1,7 @@
 #pragma once
-#include "GUIElement.h"
-#include "GUIManager.h"
+#include "../../include/GUI/GUIElement.h"
+
+#include "../../include/GUIManager.h"
 #include <functional>
 #include <iostream>
 

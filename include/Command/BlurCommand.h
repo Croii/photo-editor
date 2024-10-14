@@ -1,6 +1,6 @@
 #pragma once
-#include "ImageManager.h"
-#include "ICommand.h"
+#include "../../include/ImageManager.h"
+#include "../../include/Command/ICommand.h"
 
 class BlurCommand : public ICommand
 {

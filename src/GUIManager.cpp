@@ -1,4 +1,4 @@
-#include "GUIManager.h"
+#include "../../include/GUIManager.h"
 
 std::vector<std::string > GUIManager::S_ASSETNAME = { "saveFile", "selectFile", "rotateLeft", "rotateRight", "grayScale", "blur", "undo", "redo", "zoomIn", "zoomOut"};
 std::unordered_map<std::string, std::shared_ptr<sf::Texture>> GUIManager::S_ASSETS;

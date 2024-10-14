@@ -1,5 +1,4 @@
-#include "ImageManager.h"
-#include "RotateImageCommand.h"
+#include "../../include/ImageManager.h"
 
 ImageManager::ImageManager() : m_imageLoader(std::unique_ptr<ImageLoader>()), m_scale(1.0f)
 {

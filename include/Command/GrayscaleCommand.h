@@ -1,7 +1,7 @@
 #pragma once
 
-#include "ICommand.h"
-#include "ImageManager.h"
+#include "../../include/Command/ICommand.h"
+#include "../../include/ImageManager.h"
 
 
 class GrayscaleCommand : public ICommand

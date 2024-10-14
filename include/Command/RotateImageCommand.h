@@ -1,8 +1,8 @@
 #pragma once
-#include "ICommand.h"
-#include "Utility.h"
+#include "../../include/Command/ICommand.h"
+#include "../../include/Utility.h"
 
-#include "ImageManager.h"
+#include "../../include/ImageManager.h"
 
 
 class RotateImageCommand : public ICommand
